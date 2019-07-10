@@ -17,11 +17,13 @@ module.exports = {
       task: 'js',
       src: 'src/index.js',
       dest: 'build/app.min.js',
+      watch: 'src/**/*.js'
     },
     {
       task: 'sass',
       src: 'src/index.scss',
       dest: 'build/app.min.css',
+      watch: 'src/**/*.scss'
     },
   ]
 }
@@ -31,7 +33,7 @@ module.exports = {
 
 #### Develop
 
-Build during development
+Build during development - watch files and rebuild
 
 ```sh
 tgb dev
@@ -39,7 +41,7 @@ tgb dev
 
 #### Build
 
-Build for production
+Build for production - minified
 
 ```sh
 tgb build

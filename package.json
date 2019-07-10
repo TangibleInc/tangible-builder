@@ -1,7 +1,10 @@
 {
   "name": "@tangible/builder",
-  "description": "Bundle and minify assets: JS, Sass",
+  "description": "Bundle and minify assets",
   "main": "index.js",
+  "bin": {
+    "tgb": "./run"
+  },
   "scripts": {},
   "dependencies": {
     "@babel/core": "^7.5.4",
