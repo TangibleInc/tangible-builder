@@ -1,0 +1,6 @@
+{
+  "name": "tangible-builder",
+  "description": "Build JavaScript, Sass",
+  "main": "index.js",
+  "scripts": {}
+}
