@@ -42,7 +42,7 @@ module.exports = function sassTask({
         processImport: false
       }))
       .on('error', function(e) {
-        console.error('sass', e.message)
+        if (e.message) console.error('sass', e.message)
         this.emit('end')
         reject()
       })
@@ -54,7 +54,7 @@ module.exports = function sassTask({
       .pipe(rename(destFile))
       .pipe($if(isDev, sourcemaps.write()))
       .pipe(gulp.dest(destDir))
-      .on('end', () => {
+      .on('end', function() {
         console.log(chalk.green('sass'), `${toRelative(src)} -> ${toRelative(dest)}`)
         resolve()
       })

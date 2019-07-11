@@ -48,7 +48,7 @@ module.exports = function jsTask(config) {
       .pipe(rename(destFile))
       .pipe(gulp.dest(destDir))
       .on('error', function(e) {
-        console.error('js', e)
+        if (e.message) console.error('js', e.message)
         this.emit('end')
         reject()
       })

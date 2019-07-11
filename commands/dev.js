@@ -27,7 +27,7 @@ module.exports = async function devCommand(config) {
 
     console.log(chalk.blue('watch'), task.watch)
     watch(task.watch, () => {
-      runTaskAction(task).catch(console.error)
+      runTaskAction(task).catch(e => e && console.error(e.message))
     })
   }
 }
