@@ -6,8 +6,8 @@ const sourcemaps = require('gulp-sourcemaps')
 const minifyCSS = require('gulp-clean-css')
 const autoprefixer = require('gulp-autoprefixer')
 const $if = require('gulp-if')
-const wpBrowsersListConfig = require('@wordpress/browserslist-config')
 
+const browsersList = require('../config/browsers')
 const fileExists = require('../utils/fileExists')
 
 module.exports = function sassTask({
@@ -22,7 +22,7 @@ module.exports = function sassTask({
   const destFile = path.basename(dest)
 
   if (!fileExists(src)) {
-    console.error('sass', `File doesn't exist: ${src}`)
+    console.error(chalk.red('sass'), `File doesn't exist: ${src}`)
     return Promise.reject()
   }
 
@@ -39,20 +39,23 @@ module.exports = function sassTask({
           srcDir,
           path.join(appRoot, 'node_modules')
         ],
-        //processImport: false
+        processImport: false
       }))
       .on('error', function(e) {
-        if (e.message) console.error('sass', e.message)
+        console.error('sass', e.message)
         this.emit('end')
         reject()
       })
-      .pipe(autoprefixer({ overrideBrowserslist: wpBrowsersListConfig, cascade: false }))
+      .pipe(autoprefixer({
+        overrideBrowserslist: browsersList,
+        cascade: false
+      }))
       .pipe($if(!isDev, minifyCSS()))
       .pipe(rename(destFile))
       .pipe($if(isDev, sourcemaps.write()))
       .pipe(gulp.dest(destDir))
       .on('end', () => {
-        console.log('sass', `${toRelative(src)} -> ${chalk.green(toRelative(dest))}`)
+        console.log(chalk.green('sass'), `${toRelative(src)} -> ${toRelative(dest)}`)
         resolve()
       })
   })

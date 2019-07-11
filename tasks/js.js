@@ -21,8 +21,13 @@ module.exports = function jsTask(config) {
   const destFile = path.basename(dest)
 
   if (!fileExists(src)) {
-    console.error('js', `File doesn't exist: ${src}`)
+    console.error(chalk.red('js'), `File doesn't exist: ${src}`)
     return Promise.resolve()
+  }
+
+  let includedNodeModulesPath = path.join(__dirname, '..', 'node_modules')
+  if (!fileExists(includedNodeModulesPath)) {
+    includedNodeModulesPath = path.join(__dirname, '..', '..')
   }
 
   return new Promise((resolve, reject) => {
@@ -37,7 +42,7 @@ module.exports = function jsTask(config) {
           [babelify.configure(createBabelConfig(config)), {}]
         ],
         // Resolve require paths
-        paths: [ path.resolve(srcDir) ]
+        paths: [ path.resolve(srcDir), includedNodeModulesPath ]
       }))
       .pipe($if(!isDev, uglify()))
       .pipe(rename(destFile))
@@ -48,7 +53,7 @@ module.exports = function jsTask(config) {
         reject()
       })
       .on('end', () => {
-        console.log('js', `${toRelative(src)} -> ${chalk.green(toRelative(dest))}`)
+        console.log(chalk.green('js'), `${toRelative(src)} -> ${toRelative(dest)}`)
         resolve()
       })
   })

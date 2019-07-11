@@ -1,4 +1,4 @@
-const wpBrowsersListConfig = require('@wordpress/browserslist-config')
+const browsersList = require('./browsers')
 
 module.exports = function createBabelConfig(config) {
 
@@ -8,7 +8,7 @@ module.exports = function createBabelConfig(config) {
         { modules: 'commonjs',
           targets: config.isServer
             ? { node: 'current' }
-            : wpBrowsersListConfig
+            : browsersList
         }
       ],
       [require.resolve('@babel/preset-react'), {

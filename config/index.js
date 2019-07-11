@@ -7,10 +7,9 @@ module.exports = function createConfig() {
 
   const args = process.argv.slice(2)
 
-  const appRoot = process.cwd()
-
   // App config
 
+  const appRoot = process.cwd()
   const appConfigPath = path.join(appRoot, 'tangible.config.js')
   let appConfig
 
@@ -39,15 +38,13 @@ module.exports = function createConfig() {
     ? args.shift()
     : 'help'
 
-  // Utilities for tasks
-
-  const toRelative = f => path.relative(appRoot, f)
-
   return {
     command, args,
     appRoot, appConfig,
 
-    toRelative, chalk,
-    fileExists, getTaskAction
+    // Utilities for tasks
+    chalk,
+    fileExists, getTaskAction,
+    toRelative: f => path.relative(appRoot, f),
   }
 }

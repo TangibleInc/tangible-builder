@@ -6,11 +6,13 @@ module.exports = async function buildCommand(config) {
 
   if (!tasks.length) throw 'No build tasks found'
 
-  console.log('Build (production mode)\n')
+  console.log('Build for production\n')
 
-  const buildPromises = tasks.map(task =>
-    getTaskAction(task.task)({ ...config, task })
-  )
+  const runTaskAction = task => getTaskAction(task.task)({
+    ...config, task
+  })
 
-  await Promise.all(buildPromises)
+  try {
+    await Promise.all(tasks.map(runTaskAction))
+  } catch(e) { /**/ }
 }

@@ -1,5 +1,6 @@
 {
   "name": "@tangible/builder",
+  "version": "1.0.0",
   "description": "Bundle and minify assets",
   "main": "index.js",
   "bin": {
@@ -28,6 +29,8 @@
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
-    "gulp-watch": "^5.0.1"
+    "gulp-watch": "^5.0.1",
+    "source-map-support": "^0.5.12",
+    "typescript": "^3.5.3"
   }
 }

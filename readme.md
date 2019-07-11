@@ -2,7 +2,43 @@
 
 ## Install
 
-Run `npm install` or `yarn`
+#### As a Composer module
+
+Add to (or create) in `composer.json`
+
+```json
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@bitbucket.org:/tangibleinc/tangible-builder.git"
+    }
+  ],
+  "require": {
+    "tangible/builder": "dev-master"
+  },
+  "minimum-stability": "dev"
+}
+```
+
+Add to (or create) in `package.json`
+
+```json
+{
+  "scripts": {
+    "preinstall": "cd vendor/tangible/builder && npm install",
+    "dev": "./vendor/tangible/builder/run dev",
+    "build": "./vendor/tangible/builder/run build"
+  }
+}
+```
+
+Then run the following commands to install
+
+```sh
+composer install
+npm install
+```
 
 ## Config
 
@@ -31,12 +67,14 @@ module.exports = {
 
 ## Use
 
+Make sure to build for production before a new Git commit
+
 #### Develop
 
 Build during development - watch files and rebuild
 
 ```sh
-tgb dev
+npm run dev
 ```
 
 #### Build
@@ -44,5 +82,5 @@ tgb dev
 Build for production - minified
 
 ```sh
-tgb build
+npm run build
 ```
