@@ -92,6 +92,15 @@ module.exports = {
 }
 ```
 
+The property `build` is an array of build tasks.  Each task has the following schema.
+
+| Property | Description |
+|---|---|
+| `task` | `js` or `sass` |
+| `src` | source entry file |
+| `dest` | destination file |
+| `watch` | path of files to watch, in [glob syntax](https://github.com/isaacs/node-glob#glob-primer) |
+
 ## Use
 
 Make sure to build for production before a new Git commit
