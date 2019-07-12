@@ -1,6 +1,33 @@
 # Tangible Builder
 
+Bundle and minify assets - JavaScript, Sass
+
 ## Install
+
+There are several ways to install this tool.
+
+#### As a global command
+
+```sh
+npm install --global @tangible/builder
+```
+
+#### As a local command
+
+```sh
+npm install --save-dev @tangible/builder
+```
+
+Add to `package.json`
+
+```json
+{
+  "scripts": {
+    "dev": "tgb dev",
+    "build": "tgb build"
+  }
+}
+```
 
 #### As a Composer module
 
