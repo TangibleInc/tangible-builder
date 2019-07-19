@@ -20,6 +20,7 @@ module.exports = function sassTask({
   const srcDir = path.dirname(src)
   const destDir = path.dirname(dest)
   const destFile = path.basename(dest)
+  const srcRelativeToDest = path.relative(destDir, srcDir)
 
   if (!fileExists(src)) {
     console.error(chalk.red('sass'), `File doesn't exist: ${src}`)
@@ -52,6 +53,9 @@ module.exports = function sassTask({
       }))
       .pipe($if(!isDev, minifyCSS()))
       .pipe(rename(destFile))
+      .pipe($if(isDev, sourcemaps.mapSources(function(sourcePath, file) {
+        return path.join(srcRelativeToDest, sourcePath)
+      })))
       .pipe($if(isDev, sourcemaps.write()))
       .pipe(gulp.dest(destDir))
       .on('end', function() {

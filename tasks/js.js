@@ -5,6 +5,7 @@ const rename = require('gulp-rename')
 const babelify = require('babelify')
 const uglify = require('gulp-uglify')
 const $if = require('gulp-if')
+const sourcemaps = require('gulp-sourcemaps')
 
 const createBabelConfig = require('../config/babel')
 
@@ -19,6 +20,7 @@ module.exports = function jsTask(config) {
   const srcDir = path.dirname(src)
   const destDir = path.dirname(dest)
   const destFile = path.basename(dest)
+  const srcRelativeToDest = path.relative(destDir, srcDir)
 
   if (!fileExists(src)) {
     console.error(chalk.red('js'), `File doesn't exist: ${src}`)
@@ -30,6 +32,11 @@ module.exports = function jsTask(config) {
     includedNodeModulesPath = path.join(__dirname, '..', '..')
   }
 
+  const babelConfig = {
+    ...createBabelConfig(config),
+    sourceMaps: isDev ? 'inline' : false
+  }
+
   return new Promise((resolve, reject) => {
 
     return gulp.src(src, {
@@ -39,13 +46,19 @@ module.exports = function jsTask(config) {
       .pipe(browserify({
         debug: isDev, // Source maps
         transform: [
-          [babelify.configure(createBabelConfig(config)), {}]
+          [babelify.configure(babelConfig), {}]
         ],
         // Resolve require paths
         paths: [ path.resolve(srcDir), includedNodeModulesPath ]
       }))
+      .pipe($if(isDev, sourcemaps.init({ loadMaps: true })))
+      .pipe($if(isDev, sourcemaps.mapSources(function(sourcePath, file) {
+        //return '../src/' + sourcePath
+        return path.join(srcRelativeToDest, sourcePath)
+      })))
       .pipe($if(!isDev, uglify()))
       .pipe(rename(destFile))
+      .pipe($if(isDev, sourcemaps.write('./')))
       .pipe(gulp.dest(destDir))
       .on('error', function(e) {
         if (e.message) console.error('js', e.message)
