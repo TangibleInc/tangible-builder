@@ -32,10 +32,7 @@ module.exports = function jsTask(config) {
     includedNodeModulesPath = path.join(__dirname, '..', '..')
   }
 
-  const babelConfig = {
-    ...createBabelConfig(config),
-    sourceMaps: isDev ? 'inline' : false
-  }
+  const babelConfig = createBabelConfig(config)
 
   return new Promise((resolve, reject) => {
 
@@ -49,16 +46,18 @@ module.exports = function jsTask(config) {
           [babelify.configure(babelConfig), {}]
         ],
         // Resolve require paths
-        paths: [ path.resolve(srcDir), includedNodeModulesPath ]
+        paths: [
+          path.resolve(srcDir),
+          includedNodeModulesPath
+        ]
       }))
       .pipe($if(isDev, sourcemaps.init({ loadMaps: true })))
       .pipe($if(isDev, sourcemaps.mapSources(function(sourcePath, file) {
-        //return '../src/' + sourcePath
         return path.join(srcRelativeToDest, sourcePath)
       })))
       .pipe($if(!isDev, uglify()))
       .pipe(rename(destFile))
-      .pipe($if(isDev, sourcemaps.write('./')))
+      .pipe($if(isDev, sourcemaps.write()))
       .pipe(gulp.dest(destDir))
       .on('error', function(e) {
         if (e.message) console.error('js', e.message)

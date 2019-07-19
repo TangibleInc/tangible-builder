@@ -1,6 +1,6 @@
 {
   "name": "@tangible/builder",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Bundle and minify assets",
   "main": "index.js",
   "bin": {
