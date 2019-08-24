@@ -3,7 +3,7 @@ const watch = require('gulp-watch')
 module.exports = async function devCommand(config) {
 
   const { appConfig, getTaskAction, chalk } = config
-  const { build: tasks = [] } = appConfig
+  const { build: tasks = [], serve } = appConfig
 
   if (!tasks.length) throw 'No build tasks found'
 
@@ -30,4 +30,6 @@ module.exports = async function devCommand(config) {
       runTaskAction(task).catch(e => e && console.error(e.message))
     })
   }
+
+  if (serve) require('./serve')(config)
 }

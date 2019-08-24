@@ -31,6 +31,7 @@ module.exports = function createConfig() {
   const availableCommands = [
     'dev',
     'build',
+    'serve',
     'help',
   ]
 
