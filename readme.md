@@ -2,6 +2,18 @@
 
 Bundle and minify assets - JavaScript, Sass
 
+## Requirement
+
+[Node.js](https://nodejs.org/en/) must be installed, with its package manager, `npm`.
+
+You can download it from the above link to install the latest long-term stable version.
+
+For more flexibility, install [`n`](https://github.com/mklement0/n-install), which allows switching between Node.js versions.
+
+```sh
+curl -L https://git.io/n-install | bash
+```
+
 ## Install
 
 There are several ways to install this tool.
@@ -113,10 +125,18 @@ Build during development - watch files and rebuild
 npm run dev
 ```
 
+After running this command, it will wait and rebuild script and style as you edit the files.
+
+Reload browser to see your changes.
+
+When you're done, press CTRL+C to exit the process.
+
 #### Build
 
-Build for production - minified
+Build for production - minify script and style
 
 ```sh
 npm run build
 ```
+
+Make sure to build for production before publishing.
