@@ -6,12 +6,14 @@ module.exports = function(config) {
   const { serve: serveConfig = {} } = appConfig
   const {
     port = 3000,
-    dir = process.cwd()
+    src = process.cwd(),
+    dir,
   } = (serveConfig===true ? {} : serveConfig)
   const { get, send, router, serveStatic } = server
+  const rootDir = dir || src // Backward compatibitliy
 
   const app = server(router([
-    get('*', serveStatic(dir, { index: ['index.html'] })),
+    get('*', serveStatic(rootDir, { index: ['index.html'] })),
     (req, res) => send(res, 404)
   ]))
 

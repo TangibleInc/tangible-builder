@@ -4,6 +4,7 @@ const rename = require('gulp-rename')
 const sass = require('gulp-sass')
 const sourcemaps = require('gulp-sourcemaps')
 const minifyCSS = require('gulp-clean-css')
+const inlineBase64 = require('../plugins/gulp-inline-base64')
 const autoprefixer = require('gulp-autoprefixer')
 const $if = require('gulp-if')
 
@@ -47,6 +48,12 @@ module.exports = function sassTask({
         this.emit('end')
         reject()
       })
+      .pipe(inlineBase64({
+        baseDir: srcDir,
+        useRelativePath: true,
+        maxSize: 14 * 1024, // ~14kb
+        debug: isDev,
+      }))
       .pipe(autoprefixer({
         overrideBrowserslist: browsersList,
         cascade: false
