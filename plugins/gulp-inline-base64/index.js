@@ -1,5 +1,6 @@
 // Based on: https://github.com/uniteddomainsus/gulp-inline-base64
 // Forked because NPM package has old source
+// Also improved log to fit with Tangible Builder
 
 var es = require('event-stream')
 var path = require('path')
