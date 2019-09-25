@@ -2,11 +2,11 @@
 // Forked because NPM package has old source
 // Also improved log to fit with Tangible Builder
 
-var es = require('event-stream')
-var path = require('path')
-var fs = require('fs')
-var gutil = require('gulp-util')
-var mime = require('mime')
+const es = require('event-stream')
+const path = require('path')
+const fs = require('fs')
+const chalk = require('chalk')
+const mime = require('mime')
 
 module.exports = function(opts) {
 
@@ -14,20 +14,20 @@ module.exports = function(opts) {
 
   if (!opts.baseDir) opts.baseDir = path.dirname(module.parent.filename)
 
-  var datauri = function(file, callback) {
-    var app_path = opts.baseDir
-    var reg_exp = /url\([ '"]?(.*?)[ '"]?(|\,(.*?))\)/g
-    var isStream = file.contents && typeof file.contents.on === 'function' && typeof file.contents.pipe === 'function'
-    var isBuffer = file.contents instanceof Buffer
+  const datauri = function(file, callback) {
+    let app_path = opts.baseDir
+    const reg_exp = /url\([ '"]?(.*?)[ '"]?(|\,(.*?))\)/g
+    const isStream = file.contents && typeof file.contents.on === 'function' && typeof file.contents.pipe === 'function'
+    const isBuffer = file.contents instanceof Buffer
     if(opts.useRelativePath){
       app_path = file.path.replace(/\/[^/]+$/, '/')
     }
     if (isBuffer) {
-      var str = String(file.contents)
 
-      var matches = [],
-        found,
-        force
+      const matches = []
+      let str = String(file.contents)
+      let found, force
+
       while (found = reg_exp.exec(str)) {
         matches.push({
           'txt': found[0],
@@ -36,26 +36,26 @@ module.exports = function(opts) {
         })
       }
 
-      for (var i = 0, len = matches.length; i < len; i++) {
+      for (let i = 0, len = matches.length; i < len; i++) {
         if (matches[i].url.indexOf('data:image') === -1) { //if find -> image already decoded
-          var filepath = app_path + path.normalize(matches[i].url)
+          const filepath = app_path + path.normalize(matches[i].url)
           if (fs.existsSync(filepath)) {
-            var size = fs.statSync(filepath).size
+            const size = fs.statSync(filepath).size
 
             // File will not be included because of its size
             if (opts.maxSize && size > opts.maxSize && !matches[i].force) {
-              if (opts.debug) console.log(gutil.colors.green('sass'), 'gulp-inline-base64:', gutil.colors.yellow('file is greater than ' + Math.round(size / 1024) + 'Kb > ' + Math.round(opts.maxSize / 1024) + 'kb => skip') + gutil.colors.gray(' (' + path.relative(app_path, filepath) + ')'))
+              if (opts.debug) console.log(chalk.green('sass'), 'gulp-inline-base64:', chalk.yellow('file is greater than ' + Math.round(size / 1024) + 'Kb > ' + Math.round(opts.maxSize / 1024) + 'kb => skip') + chalk.gray(' (' + path.relative(app_path, filepath) + ')'))
               str = str.replace(matches[i].txt, 'url(' + matches[i].url + ')')
             }
 
             // Else replace by inline base64 version
             else {
-              var b = fs.readFileSync(filepath)
+              const b = fs.readFileSync(filepath)
               str = str.replace(matches[i].txt, 'url(' + ('data:' + mime.getType(filepath) + ';base64,' + b.toString('base64')) + ')')
             }
 
           } else {
-            if (opts.debug) console.log(gutil.colors.green('sass'), 'gulp-inline-base64:', gutil.colors.yellow('file not found => skip') + gutil.colors.gray(' (' + path.relative(app_path, filepath) + ')'))
+            if (opts.debug) console.log(chalk.green('sass'), 'gulp-inline-base64:', chalk.yellow('file not found => skip') + chalk.gray(' (' + path.relative(app_path, filepath) + ')'))
           }
         }
       }
