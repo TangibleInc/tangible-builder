@@ -32,6 +32,7 @@ module.exports = function createConfig() {
     'dev',
     'build',
     'serve',
+    'gitl',
     'help',
   ]
 
