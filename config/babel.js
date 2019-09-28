@@ -18,8 +18,8 @@ module.exports = function createBabelConfig(config) {
         // Ignore SVG namespace in React JSX
         // https://babeljs.io/docs/en/babel-preset-react/#throwifnamespace
         throwIfNamespace: false,
-        //pragma: `${react}.createElement`,
-        //pragmaFrag: `${react}.Fragment`,
+        pragma: `${react}.createElement`,
+        pragmaFrag: `${react}.Fragment`,
       }],
       require.resolve('@babel/preset-typescript'),
     ],
@@ -27,7 +27,11 @@ module.exports = function createBabelConfig(config) {
       require.resolve('@babel/plugin-proposal-object-rest-spread'),
       require.resolve('@babel/plugin-proposal-class-properties'),
       require.resolve('@babel/plugin-proposal-export-default-from'),
-      require.resolve('../plugins/babel-plugin-react-require'),
+      ...(react==='wp.element'
+        ? []
+        // Adds `import React from 'react'` if JSX is used
+        : [require.resolve('../plugins/babel-plugin-react-require')])
+      ,
     ]
   }
 
