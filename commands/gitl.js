@@ -34,7 +34,6 @@ module.exports = function devCommand(config) {
 
   const { hub = '', modules: mods = [] } = gitlibConfig
 
-
   const run = (cmd, options = {}) => {
 
     const {

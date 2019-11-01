@@ -1,3 +1,4 @@
+const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
 const fileExists = require('../utils/fileExists')
@@ -21,16 +22,38 @@ module.exports = function createConfig() {
       process.exit(1)
     }
   } else {
-    appConfig = { notFound: true }
-    args.splice(0)
-    args.push('help')
+    // Create new config file
+    appConfig = { build: [] }
+    fs.writeFileSync(appConfigPath,
+      `module.exports = {
+  build: [
+    // Example:
+    // {
+    //   task: 'js',
+    //   src: 'src/index.js',
+    //   dest: 'build/app.min.js',
+    //   watch: 'src/**/*.js'
+    // },
+    // {
+    //   task: 'sass',
+    //   src: 'src/index.scss',
+    //   dest: 'build/app.min.css',
+    //   watch: 'src/**/*.scss'
+    // },
+  ]
+}
+`
+    )
+    console.log(`Created new config file: ${path.relative(appRoot, appConfigPath)}`)
   }
 
   // Command
 
   const availableCommands = [
     'dev',
+    'beautify',
     'build',
+    'lint',
     'serve',
     'gitl',
     'help',
