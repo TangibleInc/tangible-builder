@@ -94,13 +94,4 @@
 
   <config name="minimum_supported_wp_version" value="4.9"/>
 
-  <rule ref="WordPress.WP.I18n">
-    <properties>
-      <property name="text_domain" type="array">
-        <element value="my-textdomain"/>
-        <element value="library-textdomain"/>
-      </property>
-    </properties>
-  </rule>
-
 </ruleset>
