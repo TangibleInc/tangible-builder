@@ -1,4 +1,5 @@
 const path = require('path')
+const fileExists = require('../utils/fileExists')
 const run = require('../utils/runCommand')
 
 module.exports = function lintCommand(config) {
@@ -8,12 +9,17 @@ module.exports = function lintCommand(config) {
     lintFix = false
   } = config
 
-  const localVendorPath = path.join(__dirname, '..', 'vendor')
+  let vendorPath = path.join(__dirname, '..', 'vendor')
 
-  const command = path.join(localVendorPath, 'bin', lintFix ? 'phpcbf' : 'phpcs')
+  if (!fileExists(vendorPath)) {
+    // plugin/vendor/tangible/builder -> plugin
+    vendorPath = path.join(__dirname, '..', '..', '..', '..', 'vendor')
+  }
+
+  const command = path.join(vendorPath, 'bin', lintFix ? 'phpcbf' : 'phpcs')
 
   let options = `--colors --extensions=php --runtime-set installed_paths ${
-    path.join(localVendorPath, 'wp-coding-standards', 'wpcs')
+    path.join(vendorPath, 'wp-coding-standards', 'wpcs')
   } --standard=${
     path.join(__dirname, '..', 'config', 'phpcs.xml')
   }`
