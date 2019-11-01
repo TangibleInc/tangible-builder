@@ -7,7 +7,7 @@ module.exports = function createBabelConfig(config) {
 
   const babelConfig = {
     presets: [
-      [ require.resolve('@babel/preset-env'),
+      [require.resolve('@babel/preset-env'),
         { modules: 'commonjs',
           targets: config.isServer
             ? { node: 'current' }
@@ -24,9 +24,48 @@ module.exports = function createBabelConfig(config) {
       require.resolve('@babel/preset-typescript'),
     ],
     plugins: [
-      require.resolve('@babel/plugin-proposal-object-rest-spread'),
-      require.resolve('@babel/plugin-proposal-class-properties'),
+
+      // Stage 1
+
+      // * https://babeljs.io/docs/en/next/babel-plugin-proposal-export-default-from
       require.resolve('@babel/plugin-proposal-export-default-from'),
+
+      // https://babeljs.io/docs/en/next/babel-plugin-proposal-logical-assignment-operators
+      //require.resolve('@babel/plugin-proposal-logical-assignment-operators'),
+
+      // https://babeljs.io/docs/en/next/babel-plugin-proposal-pipeline-operator
+      [require.resolve('@babel/plugin-proposal-pipeline-operator'), { 'proposal': 'minimal' }],
+
+      // https://babeljs.io/docs/en/next/babel-plugin-proposal-do-expressions
+      require.resolve('@babel/plugin-proposal-do-expressions'),
+
+      // Stage 2
+
+      // * https://babeljs.io/docs/en/next/babel-plugin-proposal-export-namespace-from
+      require.resolve('@babel/plugin-proposal-export-namespace-from'),
+
+      // https://babeljs.io/docs/en/next/babel-plugin-proposal-throw-expressions
+      require.resolve('@babel/plugin-proposal-throw-expressions'),
+
+      // Stage 3
+
+      // https://babeljs.io/docs/en/next/babel-plugin-proposal-optional-chaining
+      [require.resolve('@babel/plugin-proposal-optional-chaining'), { 'loose': false }],
+
+      // https://babeljs.io/docs/en/next/babel-plugin-proposal-nullish-coalescing-operator
+      [require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'), { 'loose': false }],
+
+      // * Used for route/chunk-splitting
+      require.resolve('@babel/plugin-syntax-dynamic-import'),
+
+      // * https://babeljs.io/docs/en/next/babel-plugin-proposal-class-properties
+      [require.resolve('@babel/plugin-proposal-class-properties'), { 'loose': false }],
+
+      // ES2018
+      // * https://babeljs.io/docs/en/next/babel-plugin-proposal-object-rest-spread
+      require.resolve('@babel/plugin-proposal-object-rest-spread'),
+
+
       ...(react==='wp.element'
         ? []
         // Adds `import React from 'react'` if JSX is used

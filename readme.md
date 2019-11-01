@@ -113,6 +113,14 @@ The property `build` is an array of build tasks.  Each task has the following sc
 | `dest` | destination file |
 | `watch` | path of files to watch, in [glob syntax](https://github.com/isaacs/node-glob#glob-primer) |
 
+#### React
+
+When using React and WordPress with the global `wp.element`, add the following property to the `js` task.
+
+```js
+react: 'wp.element'
+```
+
 ## Use
 
 Make sure to build for production before a new Git commit

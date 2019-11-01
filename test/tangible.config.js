@@ -4,7 +4,8 @@ module.exports = {
       task: 'js',
       src: 'src/index.js',
       dest: 'build/app.min.js',
-      watch: 'src/**/*.js'
+      watch: 'src/**/*.js',
+      react: 'wp.element'
     },
     {
       task: 'sass',
