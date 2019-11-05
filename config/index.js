@@ -7,10 +7,17 @@ const getTaskAction = require('../utils/getTaskAction')
 module.exports = function createConfig() {
 
   const args = process.argv.slice(2)
+  const appRoot = process.cwd()
+
+  // Make sure node_modules exist
+  const nodeModulesPath = path.join(appRoot, 'node_modules')
+  if (!fileExists(nodeModulesPath)) {
+    console.log('Please make sure to run "yarn" or "npm install" first.')
+    process.exit(1)
+  }
 
   // App config
 
-  const appRoot = process.cwd()
   const appConfigPath = path.join(appRoot, 'tangible.config.js')
   let appConfig
 
