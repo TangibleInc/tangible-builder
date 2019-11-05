@@ -98,7 +98,7 @@ module.exports = function devCommand(config) {
       // }
 
       // Add remote
-      run(`cd ${mod.dest} && git remote add hub ${hub}/${mod.src}.git`)
+      run(`cd ${mod.dest} && git remote add hub ${hub}/${mod.src}.git && git remote remove origin && git remote remove composer`)
     }
     run(`rm -rf ${tmpDir}`)
     console.log()
