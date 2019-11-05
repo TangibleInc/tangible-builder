@@ -1,6 +1,7 @@
 {
   "name": "tangible/builder",
   "require": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
     "squizlabs/php_codesniffer": "3.*",
     "wp-coding-standards/wpcs": "2.*"
   }

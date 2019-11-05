@@ -12,7 +12,7 @@ module.exports = function lintCommand(config) {
   let vendorPath = path.join(__dirname, '..', 'vendor')
 
   if (!fileExists(vendorPath)) {
-    // plugin/vendor/tangible/builder -> plugin
+    // ./vendor/tangible/builder -> .
     vendorPath = path.join(__dirname, '..', '..', '..', '..', 'vendor')
   }
 
