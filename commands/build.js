@@ -14,5 +14,7 @@ module.exports = async function buildCommand(config) {
 
   try {
     await Promise.all(tasks.map(runTaskAction))
-  } catch(e) { /**/ }
+  } catch(e) {
+    throw e
+  }
 }
