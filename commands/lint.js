@@ -24,8 +24,11 @@ module.exports = function lintCommand(config) {
   }
 
   if (!fileExists(vendorPath)) {
-    console.log('Could not find vendor folder:', vendorPath)
-    console.log('Run: composer install')
+    console.log(`
+Could not find vendor folder: ${vendorPath}
+Run: composer install
+
+`)
     process.exit(1)
     return
   }
@@ -35,7 +38,13 @@ module.exports = function lintCommand(config) {
   if (lintFix) {
     const gitStatus = run(`git status --porcelain`, { capture: true })
     if (gitStatus) {
-      console.log('Git repo has uncommitted changes - Commit before running the beautify command')
+      console.log(`
+Git repo has uncommitted changes:
+${gitStatus}
+
+Commit before running the beautify command
+
+`)
       process.exit(1)
     }
   }
