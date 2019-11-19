@@ -16,30 +16,7 @@ curl -L https://git.io/n-install | bash
 
 ## Install
 
-There are several ways to install this tool.
-
-#### As a global command
-
-```sh
-npm install --global @tangible/builder
-```
-
-#### As a local command
-
-```sh
-npm install --save-dev @tangible/builder
-```
-
-Add to `package.json`
-
-```json
-{
-  "scripts": {
-    "dev": "tgb dev",
-    "build": "tgb build"
-  }
-}
-```
+There are two ways to install this tool, as a Composer or NPM module.
 
 #### As a Composer module
 
@@ -72,12 +49,33 @@ Add to (or create) in `package.json`
 }
 ```
 
-Then run the following commands to install
+Then run the following commands to install.
 
 ```sh
 composer install
 npm install
 ```
+
+#### As a local NPM module
+
+Add to `package.json`
+
+```json
+{
+  "scripts": {
+    "postinstall": "cd node_modules/@tangible/builder && composer install",
+    "dev": "tgb dev",
+    "build": "tgb build"
+  }
+}
+```
+
+Run the following command to install
+
+```sh
+npm install --save-dev @tangible/builder
+```
+
 
 ## Config
 
