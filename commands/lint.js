@@ -27,7 +27,6 @@ module.exports = function lintCommand(config) {
     console.log(`
 Could not find vendor folder: ${vendorPath}
 Run: composer install
-
 `)
     process.exit(1)
     return
@@ -41,9 +40,7 @@ Run: composer install
       console.log(`
 Git repo has uncommitted changes:
 ${gitStatus}
-
 Commit before running the beautify command
-
 `)
       process.exit(1)
     }
