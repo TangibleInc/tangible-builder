@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const fileExists = require('../utils/fileExists')
 const run = require('../utils/runCommand')
 
@@ -9,11 +10,34 @@ module.exports = function lintCommand(config) {
     lintFix = false
   } = config
 
-  let vendorPath = path.join(__dirname, '..', 'vendor')
+  // Find vendor folder
+
+  const moduleRootPath = fs.realpathSync(path.join(__dirname, '..'))
+
+  // Builder installed as NPM module: tangible-builder/vendor
+  let vendorPath = path.join(moduleRootPath, 'vendor')
 
   if (!fileExists(vendorPath)) {
-    // ./vendor/tangible/builder -> .
-    vendorPath = path.join(__dirname, '..', '..', '..', '..', 'vendor')
+
+    // Builder installed as Composer module: ./vendor/tangible/builder -> .
+    vendorPath = path.join(moduleRootPath, '..', '..', '..', 'vendor')
+  }
+
+  if (!fileExists(vendorPath)) {
+    console.log('Could not find vendor folder:', vendorPath)
+    console.log('Run: composer install')
+    process.exit(1)
+    return
+  }
+
+  // For beautify, make sure Git repo has no uncommitted changes
+
+  if (lintFix) {
+    const gitStatus = run(`git status --porcelain`, { capture: true })
+    if (gitStatus) {
+      console.log('Git repo has uncommitted changes - Commit before running the beautify command')
+      process.exit(1)
+    }
   }
 
   const command = path.join(vendorPath, 'bin', lintFix ? 'phpcbf' : 'phpcs')
