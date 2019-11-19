@@ -66,14 +66,17 @@ Add to `package.json`
     "postinstall": "cd node_modules/@tangible/builder && composer install",
     "dev": "tgb dev",
     "build": "tgb build"
+  },
+  "devDependencies": {
+    "@tangible/builder": "*"
   }
 }
 ```
 
-Run the following command to install
+Install
 
 ```sh
-npm install --save-dev @tangible/builder
+npm install
 ```
 
 
