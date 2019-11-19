@@ -44,7 +44,9 @@ Add to (or create) in `package.json`
   "scripts": {
     "preinstall": "cd vendor/tangible/builder && npm install",
     "dev": "./vendor/tangible/builder/run dev",
-    "build": "./vendor/tangible/builder/run build"
+    "build": "./vendor/tangible/builder/run build",
+    "lint": "./vendor/tangible/builder/run lint",
+    "beautify": "./vendor/tangible/builder/run beautify"
   }
 }
 ```
@@ -65,7 +67,9 @@ Add to `package.json`
   "scripts": {
     "postinstall": "cd node_modules/@tangible/builder && composer install",
     "dev": "tgb dev",
-    "build": "tgb build"
+    "build": "tgb build",
+    "lint": "tgb lint",
+    "beautify": "tgb beautify"
   },
   "devDependencies": {
     "@tangible/builder": "*"
@@ -149,3 +153,39 @@ npm run build
 ```
 
 Make sure to build for production before publishing.
+
+#### Lint and Beautify
+
+The `lint` command ensures code standards, with warnings of any syntax/formatting issues.
+
+```sh
+npm run lint
+```
+
+The `beautify` command is similar to `lint`, but automatically fixes any issues with code standards.
+
+```sh
+npm run beautify
+```
+
+Commit any changes before running this command, because it can make changes to the code.
+
+##### Exclude files
+
+With some files, the beautify command has difficulty fixing them.
+
+In that case, pass an option in the script in `package.json` to exclude the file.
+
+For example, if the builder was installed as Composer module:
+
+```
+  "beautify": "./vendor/tangible/builder/run beautify --ignore=\"includes/file-name\\.php\""
+```
+
+If installed as NPM module:
+
+```
+  "beautify": "tgb beautify --ignore=\"includes/file-name\\.php\""
+```
+
+Note how double quotes *and period* must be escaped.
