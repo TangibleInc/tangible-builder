@@ -40,15 +40,15 @@ Run: composer install
       console.log(`
 Git repo has uncommitted changes:
 ${gitStatus}
-Commit before running the beautify command
+It's recommended to commit before running the beautify command
 `)
-      process.exit(1)
+      //process.exit(1)
     }
   }
 
   const command = path.join(vendorPath, 'bin', lintFix ? 'phpcbf' : 'phpcs')
 
-  let options = `--colors --extensions=php --runtime-set installed_paths ${
+  let options = `--colors --extensions=php -s --runtime-set installed_paths ${
     path.join(vendorPath, 'wp-coding-standards', 'wpcs')
   } --standard=${
     path.join(__dirname, '..', 'config', 'phpcs.xml')

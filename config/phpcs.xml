@@ -49,6 +49,7 @@
     <exclude name="Squiz.Scope.MethodScope.Missing"/>
 
     <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+    <exclude name="WordPress.PHP.NoSilencedErrors.Discouraged"/>
     <exclude name="WordPress.WP.EnqueuedResources.NonEnqueuedScript"/>
 
     <!-- 2-space indent -->
