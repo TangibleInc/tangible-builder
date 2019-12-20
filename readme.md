@@ -1,6 +1,6 @@
 # Tangible Builder
 
-Bundle and minify assets - JavaScript, Sass
+Bundle assets, minify, lint, test
 
 ## Requirement
 
