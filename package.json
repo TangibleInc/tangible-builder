@@ -46,5 +46,7 @@
     "mime": "^2.4.4",
     "source-map-support": "^0.5.16",
     "typescript": "^3.6.4"
-  }
+  },
+  "repository": "git@bitbucket.org:tangibleinc/tangible-builder.git",
+  "license": "MIT"
 }
