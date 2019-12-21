@@ -1,8 +1,8 @@
-.example:before {
+.example::before {
   // Test inline image below ~14Kb
   content: url(../test.jpg);
 }
 
 .dummy {
-  background: url(/path/to/non-existing.file)
+  background: url(/path/to/non-existing.file);
 }

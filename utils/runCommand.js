@@ -4,15 +4,16 @@ const run = (cmd, options = {}) => {
 
   const {
     silent = false,
-    capture = false
+    capture = false,
+    cwd = process.cwd()
   } = options
 
   if (!silent && !capture) console.log(cmd)
 
   try {
     const result = capture
-      ? execSync(cmd, { stdio: 'pipe' }).toString()
-      : execSync(cmd, { stdio: 'inherit' })
+      ? execSync(cmd, { stdio: 'pipe', cwd }).toString()
+      : execSync(cmd, { stdio: 'inherit', cwd })
 
     if (capture) return result
     if (result) console.log(result)
