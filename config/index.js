@@ -11,8 +11,9 @@ module.exports = function createConfig() {
 
   // Make sure node_modules exist
   const nodeModulesPath = path.join(appRoot, 'node_modules')
-  if (!fileExists(nodeModulesPath)) {
-    console.log('Please make sure to run "yarn" or "npm install" first.')
+  const fallbackNodeModulesPath = path.join(__dirname, '..', 'node_modules')
+  if (!fileExists(nodeModulesPath) && !fileExists(fallbackNodeModulesPath)) {
+    console.log('Couldn\'t find node_modules folder. Please make sure to run "npm install" or "yarn" first.')
     process.exit(1)
   }
 
