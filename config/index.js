@@ -10,11 +10,14 @@ module.exports = function createConfig() {
   const appRoot = process.cwd()
 
   // Make sure node_modules exist
-  const nodeModulesPath = path.join(appRoot, 'node_modules')
-  const fallbackNodeModulesPath = path.join(__dirname, '..', 'node_modules')
-  if (!fileExists(nodeModulesPath) && !fileExists(fallbackNodeModulesPath)) {
-    console.log('Couldn\'t find node_modules folder. Please make sure to run "npm install" or "yarn" first.')
-    process.exit(1)
+  let nodeModulesPath = path.join(appRoot, 'node_modules')
+
+  if (!fileExists(nodeModulesPath)) {
+    nodeModulesPath = path.join(__dirname, '..', 'node_modules')
+    if (!fileExists(nodeModulesPath)) {
+      console.log('Couldn\'t find node_modules folder. Please make sure to run "npm install" or "yarn" first.')
+      process.exit(1)
+    }
   }
 
   // App config
@@ -30,41 +33,20 @@ module.exports = function createConfig() {
       process.exit(1)
     }
   } else {
-    // Create new config file
     appConfig = { build: [] }
-    fs.writeFileSync(appConfigPath,
-      `module.exports = {
-  build: [
-    // Example:
-    // {
-    //   task: 'js',
-    //   src: 'src/index.js',
-    //   dest: 'build/app.min.js',
-    //   watch: 'src/**/*.js'
-    // },
-    // {
-    //   task: 'sass',
-    //   src: 'src/index.scss',
-    //   dest: 'build/app.min.css',
-    //   watch: 'src/**/*.scss'
-    // },
-  ]
-}
-`
-    )
-    console.log(`Created new config file: ${path.relative(appRoot, appConfigPath)}`)
   }
 
   // Command
 
   const availableCommands = [
-    'dev',
     'beautify',
     'build',
-    'lint',
-    'serve',
+    'dev',
     'gitl',
     'help',
+    'init',
+    'lint',
+    'serve',
   ]
 
   const command = args[0] && availableCommands.includes(args[0])
@@ -74,6 +56,8 @@ module.exports = function createConfig() {
   return {
     command, args,
     appRoot, appConfig,
+
+    appConfigPath, nodeModulesPath,
 
     // Utilities for tasks
     chalk,

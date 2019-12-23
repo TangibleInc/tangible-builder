@@ -7,8 +7,9 @@ module.exports = function lintCommand(config) {
 
   const {
     args,
+    chalk,
+    appRoot, nodeModulesPath,
     lintFix = false,
-    chalk
   } = config
 
   // Find vendor folder
@@ -48,7 +49,7 @@ module.exports = function lintCommand(config) {
 
   let command = path.join(vendorPath, 'bin', lintFix ? 'phpcbf' : 'phpcs')
 
-  let options = `--colors --extensions=php -s --runtime-set installed_paths ${
+  let options = `--colors --extensions=php -s -v --runtime-set installed_paths ${
     path.join(vendorPath, 'wp-coding-standards', 'wpcs')
   } --standard=${
     path.join(builderConfigPath, 'phpcs.xml')
@@ -68,6 +69,7 @@ module.exports = function lintCommand(config) {
 
   command = `${command} ${options}`
   console.log(`${taskTitle} php`)
+  //console.log(command)
 
   run(command, { silent: true })
 
@@ -79,9 +81,12 @@ module.exports = function lintCommand(config) {
     const sources = ['js', 'ts', 'css', 'scss'].map(f => `**/**.${f}`).join(',')
     const prettierIgnorePath = path.join(builderConfigPath, '.prettierignore')
 
-    console.log(`${taskTitle} js, ts, css, scss`)
+    command = `${nodeModulesPath}/prettier/bin-prettier.js --no-semi --single-quote --write "{${sources}}" --ignore-path ${prettierIgnorePath}`
 
-    run(`prettier --no-semi --single-quote --write "{${sources}}" --ignore-path ${prettierIgnorePath}`, { silent: true })
+    console.log(`${taskTitle} js, ts, css, scss`)
+    //console.log(command)
+
+    run(command, { silent: true })
 
   } else {
 
@@ -91,9 +96,12 @@ module.exports = function lintCommand(config) {
 
       const stylelintConfigPath = path.join(builderConfigPath, `stylelint.${extension}.js`)
 
-      console.log(`${taskTitle} ${extension}`)
+      command = `${nodeModulesPath}/stylelint/bin/stylelint.js "**/*.${extension}" --ignore-pattern "**/*.min.css" --ignore-pattern "**/vendor/**" --allow-empty-input --config ${stylelintConfigPath} --fix`
 
-      run(`stylelint "**/*.${extension}" --ignore-pattern "**/*.min.css" --allow-empty-input --config ${stylelintConfigPath} --fix`, { silent: true })
+      console.log(`${taskTitle} ${extension}`)
+      //console.log(command)
+
+      run(command, { silent: true })
     })
 
     // TODO: ESLint for JS/TS
