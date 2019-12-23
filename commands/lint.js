@@ -44,12 +44,17 @@ module.exports = function lintCommand(config) {
 
   const taskTitle = chalk.green(lintFix ? 'beautify' : 'lint')
 
+  const prettierCommand = `${nodeModulesPath}/prettier/bin-prettier.js`
+  const prettierIgnorePath = path.join(builderConfigPath, '.prettierignore')
+
+  const stylelintCommand = `${nodeModulesPath}/stylelint/bin/stylelint.js`
+  const getStylelintConfigPath = extension => path.join(builderConfigPath, `stylelint.${extension}.js`)
 
   // PHP Code Sniffer/Fixer - @see https://github.com/squizlabs/PHP_CodeSniffer
 
   let command = path.join(vendorPath, 'bin', lintFix ? 'phpcbf' : 'phpcs')
 
-  let options = `--colors --extensions=php -s -v --runtime-set installed_paths ${
+  let options = `--colors --extensions=php -s${ lintFix ? ' -v' : ''} --runtime-set installed_paths ${
     path.join(vendorPath, 'wp-coding-standards', 'wpcs')
   } --standard=${
     path.join(builderConfigPath, 'phpcs.xml')
@@ -71,6 +76,9 @@ module.exports = function lintCommand(config) {
   console.log(`${taskTitle} php`)
   //console.log(command)
 
+  // @see @prettier/plugin-php https://github.com/prettier/plugin-php
+  //if (lintFix) run(`${prettierCommand} --single-quote --tab-width=2 --brace-style=1tbs --write "**/**.php" --ignore-path ${prettierIgnorePath}`, { silent: true })
+
   run(command, { silent: true })
 
 
@@ -79,9 +87,8 @@ module.exports = function lintCommand(config) {
     // Prettier - @see https://prettier.io/
 
     const sources = ['js', 'ts', 'css', 'scss'].map(f => `**/**.${f}`).join(',')
-    const prettierIgnorePath = path.join(builderConfigPath, '.prettierignore')
 
-    command = `${nodeModulesPath}/prettier/bin-prettier.js --no-semi --single-quote --write "{${sources}}" --ignore-path ${prettierIgnorePath}`
+    command = `${prettierCommand} --no-semi --single-quote --write "{${sources}}" --ignore-path ${prettierIgnorePath}`
 
     console.log(`${taskTitle} js, ts, css, scss`)
     //console.log(command)
@@ -94,9 +101,7 @@ module.exports = function lintCommand(config) {
 
     ;['css', 'scss'].forEach(extension => {
 
-      const stylelintConfigPath = path.join(builderConfigPath, `stylelint.${extension}.js`)
-
-      command = `${nodeModulesPath}/stylelint/bin/stylelint.js "**/*.${extension}" --ignore-pattern "**/*.min.css" --ignore-pattern "**/vendor/**" --allow-empty-input --config ${stylelintConfigPath} --fix`
+      command = `${stylelintCommand} "**/*.${extension}" --ignore-pattern "**/*.min.css" --ignore-pattern "**/vendor/**" --allow-empty-input --config ${ getStylelintConfigPath(extension) } --fix`
 
       console.log(`${taskTitle} ${extension}`)
       //console.log(command)
