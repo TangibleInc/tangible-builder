@@ -1,13 +1,16 @@
 {
   "name": "@tangible/builder",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "description": "Build tasks: bundle assets, minify, lint, test",
   "main": "index.js",
   "bin": {
     "tgb": "./run"
   },
   "scripts": {
-    "test": "cd test && ../run dev",
+    "test-dev": "cd test && ../run dev",
+    "test-lint": "cd test && ../run lint",
+    "test-beautify": "cd test && ../run beautify",
+    "test-serve": "cd test && ../run serve",
     "test-build": "cd test && ../run build"
   },
   "dependencies": {
@@ -44,7 +47,13 @@
     "gulp-uglify": "^3.0.2",
     "gulp-watch": "^5.0.1",
     "mime": "^2.4.4",
+    "prettier": "^1.19.1",
     "source-map-support": "^0.5.16",
+    "stylelint": "^12.0.0",
+    "stylelint-config-recommended": "^3.0.0",
+    "stylelint-config-sass-guidelines": "^6.2.0",
     "typescript": "^3.6.4"
-  }
+  },
+  "repository": "git@bitbucket.org:tangibleinc/tangible-builder.git",
+  "license": "MIT"
 }

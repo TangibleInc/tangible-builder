@@ -12,7 +12,7 @@ module.exports = {
       src: 'src/index.scss',
       dest: 'build/app.min.css',
       watch: 'src/**/*.scss'
-    },
+    }
   ],
   serve: {
     src: '.',

@@ -1,6 +1,6 @@
 # Tangible Builder
 
-Bundle and minify assets - JavaScript, Sass
+Bundle assets, minify, lint, test
 
 ## Requirement
 
@@ -42,11 +42,13 @@ Add to (or create) in `package.json`
 ```json
 {
   "scripts": {
-    "preinstall": "cd vendor/tangible/builder && npm install",
     "dev": "./vendor/tangible/builder/run dev",
     "build": "./vendor/tangible/builder/run build",
     "lint": "./vendor/tangible/builder/run lint",
     "beautify": "./vendor/tangible/builder/run beautify"
+  },
+  "devDependencies": {
+    "@tangible/builder": "*"
   }
 }
 ```
