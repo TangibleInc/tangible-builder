@@ -23,7 +23,11 @@
 
   <arg name="tab-width" value="2"/>
 
-  <rule ref="WordPress">
+  <!--
+    Previously, ref="WordPress" was used, which includes: WordPress-Core, WordPress-Docs, WordPress-Extras
+    However, something in Extras was having performance issue; check back when wp-coding-standards/wpcs is updated.
+  -->
+  <rule ref="WordPress-Core">
 
     <!-- Allow more flexible and terse expression -->
 
@@ -93,6 +97,6 @@
   <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
   <rule ref="Generic.Commenting.Todo"/>
 
-  <config name="minimum_supported_wp_version" value="4.9"/>
+  <config name="minimum_supported_wp_version" value="5.0"/>
 
 </ruleset>
