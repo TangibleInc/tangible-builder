@@ -54,7 +54,8 @@ module.exports = function lintCommand(config) {
 
   let command = path.join(vendorPath, 'bin', lintFix ? 'phpcbf' : 'phpcs')
 
-  let options = `--colors --extensions=php -s${ lintFix ? ' -v' : ''} --runtime-set installed_paths ${
+  // Show verbose progress, rule names, set paths to standards
+  let options = `-v -s --colors --extensions=php --runtime-set installed_paths ${
     path.join(vendorPath, 'wp-coding-standards', 'wpcs')
   } --standard=${
     path.join(builderConfigPath, 'phpcs.xml')
