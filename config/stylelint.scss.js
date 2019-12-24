@@ -4,6 +4,7 @@ module.exports = {
 
   extends: 'stylelint-config-sass-guidelines',
   rules: {
-    'function-url-quotes': null
+    'function-url-quotes': null,
+    'max-nesting-depth': null
   }
 }

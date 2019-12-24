@@ -4,6 +4,8 @@ module.exports = {
 
   extends: 'stylelint-config-recommended',
   rules: {
-    'function-url-quotes': null
+    'function-url-quotes': null,
+    'no-descending-specificity': null,
+    'block-no-empty': null
   }
 }
