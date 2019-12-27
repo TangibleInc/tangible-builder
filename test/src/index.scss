@@ -1,8 +1,13 @@
+/**
+ * Test inline image below ~14Kb
+ */
 .example::before {
-  // Test inline image below ~14Kb
   content: url(../test.jpg);
 }
 
+/**
+ * Test non-existing file
+ */
 .dummy {
   background: url(/path/to/non-existing.file);
 }

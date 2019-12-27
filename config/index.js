@@ -4,6 +4,18 @@ const chalk = require('chalk')
 const fileExists = require('../utils/fileExists')
 const getTaskAction = require('../utils/getTaskAction')
 
+const availableCommands = [
+  'beautify',
+  'build',
+  'dev',
+  'docs',
+  'gitl',
+  'help',
+  'init',
+  'lint',
+  'serve',
+]
+
 module.exports = function createConfig() {
 
   const args = process.argv.slice(2)
@@ -37,17 +49,6 @@ module.exports = function createConfig() {
   }
 
   // Command
-
-  const availableCommands = [
-    'beautify',
-    'build',
-    'dev',
-    'gitl',
-    'help',
-    'init',
-    'lint',
-    'serve',
-  ]
 
   const command = args[0] && availableCommands.includes(args[0])
     ? args.shift()
