@@ -48,6 +48,7 @@ module.exports = async function(config) {
       if (!docBlocks.length) continue
 
       console.log(file)
+
       docsResult.push({
         file, docBlocks
       })

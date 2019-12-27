@@ -14,15 +14,7 @@ const multilineRe = /(?:^|\r?\n) *(@[^\r\n]*?) *\r?\n *(?![^@\r\n]*\/\/[^]*)([^@
 const stringStartRe = /(\r?\n|^) *\* ?/g
 const propertyRe = /(?:^|\r?\n) *@(\S+) *([^\r\n]*)/g
 const propertyValuesRe = /(\S+)\s*(\S+)*([^\r\n]*)/
-
 const returnTypeRe = /(\S+)*([^\r\n]*)/
-
-// Capture JS/CSS/PHP class or function definition
-const definitionRe = /\s*(([^\s{\/],?\s*)+)\s*{/
-const definitionAnonFuncRe = /\s*(([^\s{\/],?\s*)+)\s*=>/
-const definitionOpenBracketRe = /\s*{\s*$/
-
-const spaceOrNewLineRe = /([\s|\r|\n]+)/g
 const startCurlyRe = /^{/
 const endCurlyRe = /}$/
 
@@ -48,48 +40,7 @@ function extract(contents) {
   let match
   let matches = []
   while ((match = docblockRe.exec(contents))) {
-    let block = match[0]
-
-    // Class/function definition - Unused for now: too many variations of code following comments
-
-    // let definition
-    // let index = match.index + block.length
-    // let rest = contents.substr(index)
-
-    // let defMatch
-
-    // if ((defMatch = definitionAnonFuncRe.exec(rest)) && defMatch[1]) {
-    //   definition = defMatch[1].replace(spaceOrNewLineRe, ' ').replace(rtrimRe, '') + ' =>'
-    // } else if ((defMatch = definitionRe.exec(rest)) && defMatch[1]) {
-    //   definition = defMatch[1].replace(spaceOrNewLineRe, ' ').replace(rtrimRe, '')
-    // }
-
-    // /*
-    // //  Find next non-empty line to extract
-    // let pos = -1
-
-    // while ((pos = rest.indexOf("\n")) !== -1) {
-
-    //   definition = rest.substr(0, pos)
-    //     .replace(ltrimNewlineRe, '')
-    //     .replace(rtrimRe, '')
-    //     .replace(definitionOpenBracket, '')
-
-    //   if (definition) {
-    //     if (commentStartRe.exec(definition) || lineCommentRe.exec(definition)) {
-    //       definition = ''
-    //     }
-    //     break
-    //   }
-    //   rest = rest.substr(pos + 1)
-    // }
-    // */
-
-    // if (definition) {
-    //   block = block.replace(commentEndRe, '* @definition '+definition+'\n */')
-    // }
-
-    matches.push(block)
+    matches.push(match[0])
   }
   return matches.map(match => match.replace(ltrimRe, ''))
 }
@@ -115,27 +66,36 @@ function parseDocblock(docblock) {
   // Title and description
 
   let rest = docblock
-  let pos
+  let pos = rest.indexOf("\n")
 
-  while ((pos = rest.indexOf("\n")) !== -1) {
-
-    const line = rest.substr(0, pos) // Every line is already left/right trimmed
-
-    if (line) {
-      // First property encountered
-      if (line[0]==='@') break
-
-      if (!result.title) {
-        result.title = line
-      } else if (!result.description) {
-        result.description = line
-      } else {
-        // Keep adding to description
-        result.description += "\n" + line
-      }
+  if (pos === -1) {
+    // Only line is title
+    if (line[0]!=='@') {
+      result.title = rest
+      return result
     }
+  } else {
+    do {
 
-    rest = rest.substr(pos + 1)
+      const line = rest.substr(0, pos) // Every line is already left/right trimmed
+
+      if (line) {
+        // First property encountered
+        if (line[0]==='@') break
+
+        if (!result.title) {
+          result.title = line
+        } else if (!result.description) {
+          result.description = line
+        } else {
+          // Keep adding to description
+          result.description += "\n" + line
+        }
+      }
+
+      rest = rest.substr(pos + 1)
+
+    } while ((pos = rest.indexOf("\n")) !== -1)
   }
 
   // Properties
@@ -181,6 +141,7 @@ function parseDocblock(docblock) {
     }
 
     // Array properties
+
     if (key==='see') {
       if (!result[key]) result[key] = []
       result[key].push(value)
@@ -194,10 +155,7 @@ function parseDocblock(docblock) {
 }
 
 function parse(docblocks = '') {
-  if (!Array.isArray(docblocks)) {
-    return parse(extract(docblocks))
-  }
-  return docblocks
+  return extract(docblocks)
     .map(docblock => parseDocblock(docblock))
     .filter(docblockTags => Object.keys(docblockTags).length !== 0)
 }
