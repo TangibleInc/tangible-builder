@@ -4,7 +4,7 @@
 
 const commentEndRe = /\*\/$/
 const commentStartRe = /^\/\*\*/
-const docblockRe = /\/\*{2}([\s\S]+?)\*\//g
+const docblockRe = /\/\*{2}[\s|\r|\n]([\s\S]+?)\*\//g
 const lineCommentRe = /(^|\s+)\/\/([^\r\n]*)/g
 const ltrimRe = /^\s*/
 const rtrimRe = /\s*$/
@@ -21,6 +21,7 @@ const returnTypeRe = /(\S+)*([^\r\n]*)/
 const definitionRe = /\s*(([^\s{\/],?\s*)+)\s*{/
 const definitionAnonFuncRe = /\s*(([^\s{\/],?\s*)+)\s*=>/
 const definitionOpenBracketRe = /\s*{\s*$/
+
 const spaceOrNewLineRe = /([\s|\r|\n]+)/g
 const startCurlyRe = /^{/
 const endCurlyRe = /}$/
@@ -49,44 +50,44 @@ function extract(contents) {
   while ((match = docblockRe.exec(contents))) {
     let block = match[0]
 
-    // Class/function definition
+    // Class/function definition - Unused for now: too many variations of code following comments
 
-    let definition
-    let index = match.index + block.length
-    let rest = contents.substr(index)
+    // let definition
+    // let index = match.index + block.length
+    // let rest = contents.substr(index)
 
-    let defMatch
+    // let defMatch
 
-    if ((defMatch = definitionAnonFuncRe.exec(rest)) && defMatch[1]) {
-      definition = defMatch[1].replace(spaceOrNewLineRe, ' ').replace(rtrimRe, '') + ' =>'
-    } else if ((defMatch = definitionRe.exec(rest)) && defMatch[1]) {
-      definition = defMatch[1].replace(spaceOrNewLineRe, ' ').replace(rtrimRe, '')
-    }
+    // if ((defMatch = definitionAnonFuncRe.exec(rest)) && defMatch[1]) {
+    //   definition = defMatch[1].replace(spaceOrNewLineRe, ' ').replace(rtrimRe, '') + ' =>'
+    // } else if ((defMatch = definitionRe.exec(rest)) && defMatch[1]) {
+    //   definition = defMatch[1].replace(spaceOrNewLineRe, ' ').replace(rtrimRe, '')
+    // }
 
-    /*
-    //  Find next non-empty line to extract
-    let pos = -1
+    // /*
+    // //  Find next non-empty line to extract
+    // let pos = -1
 
-    while ((pos = rest.indexOf("\n")) !== -1) {
+    // while ((pos = rest.indexOf("\n")) !== -1) {
 
-      definition = rest.substr(0, pos)
-        .replace(ltrimNewlineRe, '')
-        .replace(rtrimRe, '')
-        .replace(definitionOpenBracket, '')
+    //   definition = rest.substr(0, pos)
+    //     .replace(ltrimNewlineRe, '')
+    //     .replace(rtrimRe, '')
+    //     .replace(definitionOpenBracket, '')
 
-      if (definition) {
-        if (commentStartRe.exec(definition) || lineCommentRe.exec(definition)) {
-          definition = ''
-        }
-        break
-      }
-      rest = rest.substr(pos + 1)
-    }
-    */
+    //   if (definition) {
+    //     if (commentStartRe.exec(definition) || lineCommentRe.exec(definition)) {
+    //       definition = ''
+    //     }
+    //     break
+    //   }
+    //   rest = rest.substr(pos + 1)
+    // }
+    // */
 
-    if (definition) {
-      block = block.replace(commentEndRe, '* @definition '+definition+'\n */')
-    }
+    // if (definition) {
+    //   block = block.replace(commentEndRe, '* @definition '+definition+'\n */')
+    // }
 
     matches.push(block)
   }
@@ -168,12 +169,21 @@ function parseDocblock(docblock) {
       // Return: Type, description
 
       const valMatch = returnTypeRe.exec(value)
-      const prop = {
-        type: (valMatch[1] || '').replace(startCurlyRe, '').replace(endCurlyRe, ''),
-        description: (valMatch[2] || '').replace(ltrimRe, '').replace(rtrimRe, ''),
-      }
+      if (valMatch) {
+        const prop = {
+          type: (valMatch[1] || '').replace(startCurlyRe, '').replace(endCurlyRe, ''),
+          description: (valMatch[2] || '').replace(ltrimRe, '').replace(rtrimRe, ''),
+        }
 
-      result['return'] = prop
+        result['return'] = prop
+      }
+      continue
+    }
+
+    // Array properties
+    if (key==='see') {
+      if (!result[key]) result[key] = []
+      result[key].push(value)
       continue
     }
 

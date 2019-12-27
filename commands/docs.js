@@ -5,21 +5,37 @@ const parseDocblock = require('../tasks/docs')
 module.exports = async function(config) {
 
   const { appConfig, chalk } = config
-  let { docs } = appConfig
+  let {
+    docs = [
+      {
+        src: '**/*.php',
+        dest: 'docs-dev/php.json'
+      },
+      {
+        src: '**/*.js',
+        dest: 'docs-dev/js.json'
+      },
+      {
+        src: '**/*.scss',
+        dest: 'docs-dev/scss.json'
+      },
+    ]
+  } = appConfig
 
-  if (!docs) return
+  //if (!docs) return
   if (!Array.isArray(docs)) docs = [docs]
 
   console.log('Gather all DocBlock comments\n')
 
   for (const { src, dest, exclude = [] } of docs) {
 
-    const globSrc = `{${
-      Array.isArray(src) ? src.join(',') : src
-    }}`
+    const sources = !Array.isArray(src) ? src.split(',') : src
+    const globSrc = sources.length > 1 ? `{${
+      sources.join(',')
+    }}` : src
 
     const files = glob.sync(globSrc, {
-      ignore: ['**/vendor/**', '**/build/**', '**/*.min.*', ...(
+      ignore: ['**/vendor/**', '**/node_modules/**', '**/build/**', '**/*.min.*', ...(
         typeof exclude==='string' ? exclude.split(',') : exclude
       )]
     })
@@ -37,8 +53,8 @@ module.exports = async function(config) {
       })
     }
 
-    if (!docsResult) {
-      console.log('No files found with DocBlock comments')
+    if (!docsResult.length) {
+      console.log(chalk.yellow('docs'), src, '->', 'No matching files found with DocBlock comments')
       continue
     }
 
