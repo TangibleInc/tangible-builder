@@ -1,5 +1,9 @@
 /**
  * Parse DocBlock comments - Language-agnostic syntax
+ *
+ * PHPDoc - @see https://docs.phpdoc.org/references/phpdoc/types.html
+ * JSDoc - @see https://jsdoc.app/tags-param.html
+ * SassDoc - @see http://sassdoc.com/
  */
 
 const commentEndRe = /\*\/$/
