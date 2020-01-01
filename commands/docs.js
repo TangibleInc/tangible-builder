@@ -40,7 +40,7 @@ module.exports = async function(config) {
       )]
     })
 
-    const docsResult = []
+    const docsResult = {}
 
     for (const file of files) {
 
@@ -49,12 +49,10 @@ module.exports = async function(config) {
 
       console.log(file)
 
-      docsResult.push({
-        file, docBlocks
-      })
+      docsResult[file] = docBlocks
     }
 
-    if (!docsResult.length) {
+    if (!Object.keys(docsResult).length) {
       console.log(chalk.yellow('docs'), src, '->', 'No matching files found with DocBlock comments')
       continue
     }
