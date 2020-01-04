@@ -12,7 +12,7 @@ const browsersList = require('../config/browsers')
 const fileExists = require('../utils/fileExists')
 
 module.exports = function sassTask({
-  task: { src, dest, root: rootDirs },
+  task: { src, dest, root: rootDirs = [] },
   appRoot,
   isDev = false,
   toRelative, chalk
@@ -40,7 +40,7 @@ module.exports = function sassTask({
         includePaths: [
           srcDir,
           path.join(appRoot, 'node_modules'),
-          ...(rootDirs ? (typeof rootDirs==='string' ? [rootDirs] : rootDirs) : [])
+          ...(typeof rootDirs==='string' ? [rootDirs] : rootDirs)
         ],
         processImport: false
       }))

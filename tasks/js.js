@@ -12,7 +12,7 @@ const createBabelConfig = require('../config/babel')
 module.exports = function jsTask(config) {
 
   const {
-    task: { src, dest },
+    task: { src, dest, root: rootDirs = [] },
     isDev = false,
     toRelative, chalk, fileExists,
   } = config
@@ -48,7 +48,8 @@ module.exports = function jsTask(config) {
         // Resolve require paths
         paths: [
           path.resolve(srcDir),
-          includedNodeModulesPath
+          includedNodeModulesPath,
+          ...(typeof rootDirs==='string' ? [rootDirs] : rootDirs)
         ]
       }))
       .pipe($if(isDev, sourcemaps.init({ loadMaps: true })))
@@ -60,7 +61,7 @@ module.exports = function jsTask(config) {
       .pipe($if(isDev, sourcemaps.write()))
       .pipe(gulp.dest(destDir))
       .on('error', function(e) {
-        if (e.message) console.error('js', e.message)
+        if (e.message) console.error(chalk.red('js'), e.message)
         this.emit('end')
         reject()
       })

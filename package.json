@@ -1,6 +1,6 @@
 {
   "name": "@tangible/builder",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Build tasks: bundle assets, minify, lint, test",
   "main": "index.js",
   "bin": {
@@ -39,7 +39,7 @@
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.1",
     "gulp-babel": "^8.0.0",
-    "gulp-bro": "^1.0.3",
+    "gulp-bro": "^2.0.0",
     "gulp-clean-css": "^4.2.0",
     "gulp-if": "^3.0.0",
     "gulp-rename": "^1.4.0",
