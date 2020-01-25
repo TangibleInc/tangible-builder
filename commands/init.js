@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 
 module.exports = ({ appRoot, appConfigPath, fileExists }) => {
 
@@ -7,7 +8,7 @@ module.exports = ({ appRoot, appConfigPath, fileExists }) => {
   fs.writeFileSync(appConfigPath,
     `module.exports = {
   build: [
-    /*{
+    {
       task: 'js',
       src: 'src/index.js',
       dest: 'build/app.min.js',
@@ -18,7 +19,7 @@ module.exports = ({ appRoot, appConfigPath, fileExists }) => {
       src: 'src/index.scss',
       dest: 'build/app.min.css',
       watch: 'src/**/*.scss'
-    },*/
+    },
   ]
 }
 `

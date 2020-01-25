@@ -2,30 +2,39 @@ const glob = require('glob')
 const fsx = require('fs-extra')
 const parseDocblock = require('../tasks/docs')
 
+const defaultDocsConfig = [
+  {
+    src: '**/*.php',
+    dest: 'docs-dev/php.json'
+  },
+  {
+    src: '**/*.js',
+    dest: 'docs-dev/js.json'
+  },
+  {
+    src: '**/*.scss',
+    dest: 'docs-dev/scss.json'
+  },
+]
+
 module.exports = async function(config) {
+
+  console.log('Gather all DocBlock comments\n')
 
   const { appConfig, chalk } = config
   let {
-    docs = [
-      {
-        src: '**/*.php',
-        dest: 'docs-dev/php.json'
-      },
-      {
-        src: '**/*.js',
-        dest: 'docs-dev/js.json'
-      },
-      {
-        src: '**/*.scss',
-        dest: 'docs-dev/scss.json'
-      },
-    ]
+    docs
   } = appConfig
 
-  //if (!docs) return
-  if (!Array.isArray(docs)) docs = [docs]
+  if (!docs) {
+    docs = defaultDocsConfig
 
-  console.log('Gather all DocBlock comments\n')
+    console.log('Using default config\n')
+    console.log(defaultDocsConfig)
+
+  } else if (!Array.isArray(docs)) {
+    docs = [docs]
+  }
 
   for (const { src, dest, exclude = [] } of docs) {
 

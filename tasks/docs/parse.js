@@ -1,37 +1,18 @@
-/**
- * Parse DocBlock comments - Language-agnostic syntax
- *
- * PHPDoc - @see https://docs.phpdoc.org/references/phpdoc/types.html
- * JSDoc - @see https://jsdoc.app/tags-param.html
- * SassDoc - @see http://sassdoc.com/
- */
+const { regexp } = require('constants')
 
-const commentEndRe = /\*\/$/
-const commentStartRe = /^\/\*\*/
-const docblockRe = /\/\*{2}[\s|\r|\n]([\s\S]+?)\*\//g
-const lineCommentRe = /(^|\s+)\/\/([^\r\n]*)/g
-const ltrimRe = /^\s*/
-const rtrimRe = /\s*$/
-const ltrimNewlineRe = /^(\r?\n)+/
-const multilineRe = /(?:^|\r?\n) *(@[^\r\n]*?) *\r?\n *(?![^@\r\n]*\/\/[^]*)([^@\r\n\s][^@\r\n]+?) *\r?\n/g
-const newlineRe = /(?:\r?\n)/g
+const {
 
-const stringStartRe = /(\r?\n|^)\s*\*\s?/g
-const propertyRe = /(?:^|\r?\n)*@(\S+)\s*([^\*@\r\n]*)/g
-const propertyStartRe = /\s*@(\S+)/
-const propertyValuesRe = /(\S+)\s*(\S+)*([^\r\n]*)/
-const returnTypeRe = /(\S+)*([^\r\n]*)/
-const startCurlyRe = /^{/
-const endCurlyRe = /}$/
-const repeatedSpaceRe = /(\s+)/g
+  newlineRe, multilineRe,
+  rtrimRe, ltrimRe, ltrimNewlineRe,
 
-const definitionClassRe = /^\s*[c|C]lass\s*(\S+)\s*(extends\s*\S+)?\s*(implements\s*(([^\s{\/],?\s*)+))?\s*{/
-const definitionFuncRe = /^\s*(public|private|protected|static)?\s*function\s*(\S+)\s*\((\s*([^\s{\/],?\s*)+)?\)\s*{/
-// const definitionPHPAnonFuncRe = //
-// const definitionJSAnonFuncRe = //
-// const definitionCSSRe = //
+  commentStartRe, commentEndRe, lineCommentRe,
+  stringStartRe, startCurlyRe, endCurlyRe,
+  propertyStartRe, propertyRe, propertyValuesRe,
+  returnTypeRe,
 
-const detectNewline = string => {
+} = regexp
+
+function detectNewline (string) {
   if (typeof string !== 'string') {
     throw new TypeError('Expected a string')
   }
@@ -46,44 +27,6 @@ const detectNewline = string => {
   const lf = newlines.length - crlf
 
   return crlf > lf ? '\r\n' : '\n'
-}
-
-function extract(contents) {
-
-  let match
-  let matches = []
-  while ((match = docblockRe.exec(contents))) {
-
-    let block = match[0]
-
-    // Extract class/function definition following a DocBlock
-
-    let index = match.index + block.length
-    let rest = contents.substr(index)
-
-    let definition
-    let definitionType
-    let defMatch
-
-    if ((defMatch = definitionClassRe.exec(rest)) && defMatch[1]) {
-      definitionType = 'class'
-      definition = defMatch[1]
-      if (defMatch[2]) definition += ' '+defMatch[2].replace(repeatedSpaceRe, ' ').replace(rtrimRe, '')
-      if (defMatch[3]) definition += ' '+defMatch[3].replace(repeatedSpaceRe, ' ').replace(rtrimRe, '')
-    } else if ((defMatch = definitionFuncRe.exec(rest)) && defMatch[2]) {
-      definitionType = (defMatch[1] ? defMatch[1]+' ' : '')+'function'
-      definition = defMatch[2]+(
-        defMatch[3] ? '('+defMatch[3]+')' : '()'
-      )
-    }
-
-    if (definition) {
-      block = block.replace(commentEndRe, '\n * @definitionType '+definitionType+'\n * @definition '+definition+'\n */')
-    }
-
-    matches.push(block)
-  }
-  return matches.map(match => match.replace(ltrimRe, ''))
 }
 
 function parseDocblock(docblock) {
@@ -206,10 +149,4 @@ function parseDocblock(docblock) {
   return result
 }
 
-function parse(docblocks = '') {
-  return extract(docblocks)
-    .map(docblock => parseDocblock(docblock))
-    .filter(docblockTags => Object.keys(docblockTags).length !== 0)
-}
-
-module.exports = parse
+module.exports = parseDocblock
