@@ -26,6 +26,10 @@ module.exports = async function devCommand(config) {
     if (!task.watch) continue
 
     console.log(chalk.blue('watch'), task.watch)
+
+    // HTML task watches and individually compiles
+    if (task.task==='html') continue
+
     watch(task.watch, () => {
       runTaskAction(task).catch(e => e && console.error(e.message))
     })
