@@ -33,6 +33,7 @@ module.exports = function jsTask(config) {
   }
 
   const babelConfig = createBabelConfig(config)
+  const extensions = ['.js', '.jsx', '.ts', '.tsx', '.json']
 
   return new Promise((resolve, reject) => {
 
@@ -42,8 +43,9 @@ module.exports = function jsTask(config) {
     })
       .pipe(browserify({
         debug: isDev, // Source maps
+        extensions,
         transform: [
-          [babelify.configure(babelConfig), {}]
+          [babelify.configure(babelConfig), { extensions }]
         ],
         // Resolve require paths
         paths: [
