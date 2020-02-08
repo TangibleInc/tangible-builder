@@ -7,6 +7,7 @@ const uglify = require('gulp-uglify')
 const $if = require('gulp-if')
 const sourcemaps = require('gulp-sourcemaps')
 
+const svgify = require('../plugins/svgify')
 const createBabelConfig = require('../config/babel')
 
 module.exports = function jsTask(config) {
@@ -45,7 +46,8 @@ module.exports = function jsTask(config) {
         debug: isDev, // Source maps
         extensions,
         transform: [
-          [babelify.configure(babelConfig), { extensions }]
+          [babelify.configure(babelConfig), { extensions }],
+          svgify
         ],
         // Resolve require paths
         paths: [
