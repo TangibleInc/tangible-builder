@@ -1,4 +1,5 @@
-const server = require('@mna/server')
+const handler = require('serve-handler')
+const http = require('http')
 
 module.exports = function(config) {
 
@@ -9,15 +10,21 @@ module.exports = function(config) {
     src = process.cwd(),
     dir,
   } = (serveConfig===true ? {} : serveConfig)
-  const { get, send, router, serveStatic } = server
+
   const rootDir = dir || src // Backward compatibitliy
 
-  const app = server(router([
-    get('*', serveStatic(rootDir, { index: ['index.html'] })),
-    (req, res) => send(res, 404)
-  ]))
+  // https://github.com/zeit/serve-handler#options
+  const handlerOptions = {
+    public: rootDir,
+    symlinks: true,
+    directoryListing: true
+  }
 
-  app.listen(port)
+  const server = http.createServer((req, res) =>
+    handler(req, res, handlerOptions)
+  )
 
-  console.log(chalk.blue('serve'), `http://localhost:${port}`)
+  server.listen(port, () => {
+    console.log(chalk.blue('serve'), `http://localhost:${port}`)
+  })
 }
