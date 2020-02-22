@@ -62,6 +62,4 @@ async function compileHtml({ srcFile, srcBaseDir, destDir, chalk, toRelative, te
   await fsp.writeFile(destFile, result)
 
   console.log(chalk.green('html'), `${toRelative(thisSrcFile)} -> ${toRelative(destFile)}`)
-
-  return
 }
