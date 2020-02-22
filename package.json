@@ -52,10 +52,10 @@
     "prettier": "^1.19.1",
     "serve-handler": "^6.1.2",
     "source-map-support": "^0.5.16",
-    "stylelint": "^13.0.0",
+    "stylelint": "^13.2.0",
     "stylelint-config-recommended": "^3.0.0",
     "stylelint-config-sass-guidelines": "^7.0.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.2"
   },
   "repository": "git@bitbucket.org:tangibleinc/tangible-builder.git",
   "license": "MIT"
