@@ -7,7 +7,13 @@ const fsp = require('fs-extra')
 module.exports = async function htmlTask(config) {
 
   const {
-    task: { src, srcBaseDir = 'src', dest: destDir, watch, root: rootDirs = [] },
+    task: {
+      src,
+      dest: destDir,
+      watch,
+      root: rootDirs = []
+    },
+    reloader = false,
     isDev = false,
     toRelative, chalk, fileExists,
   } = config
@@ -26,11 +32,12 @@ module.exports = async function htmlTask(config) {
 
   const templateData = {}
   const compileProps = {
-    srcBaseDir,
+    srcBaseDir: config.srcBaseDir || src.split('/')[0] || 'src',
     destDir,
     chalk,
     toRelative,
-    templateData
+    templateData,
+    reloader
   }
 
   for (const srcFile of files) {
@@ -46,18 +53,32 @@ module.exports = async function htmlTask(config) {
     if (watchEvents.indexOf(event) < 0) return
 
     compileHtml({ srcFile: history[0], ...compileProps })
+      .then(() => {
+        if (!reloader) return
+        reloader.reload()
+      })
+      .catch(e => {
+        console.log(chalk.red('html', e.message))
+      })
   })
 }
 
-async function compileHtml({ srcFile, srcBaseDir, destDir, chalk, toRelative, templateData = {} }) {
+async function compileHtml({ srcFile, srcBaseDir, destDir, chalk, toRelative, templateData = {}, reloader }) {
 
   const thisSrcFile = toRelative(srcFile)
   const srcFileName = thisSrcFile.slice(srcBaseDir.length+1)
-  const destFile = destDir + '/' + srcFileName
+  const destFile = destDir.indexOf('.')>0 ? destDir : destDir + '/' + srcFileName
 
   const srcString = await fsp.readFile(srcFile, 'utf8')
 
-  const result = ejs.render(srcString, templateData)
+  let result = ejs.render(srcString, templateData)
+
+  if (reloader) {
+    const reloaderClient = await fsp.readFile(
+      path.join(__dirname, '..', 'reloader', 'client.js')
+    )
+    result = result.replace('</body>', `<script>${reloaderClient}</script>`)
+  }
 
   await fsp.writeFile(destFile, result)
 

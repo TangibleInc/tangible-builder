@@ -55,7 +55,8 @@
     "stylelint": "^13.2.0",
     "stylelint-config-recommended": "^3.0.0",
     "stylelint-config-sass-guidelines": "^7.0.0",
-    "typescript": "^3.8.2"
+    "typescript": "^3.8.2",
+    "ws": "^7.2.1"
   },
   "repository": "git@bitbucket.org:tangibleinc/tangible-builder.git",
   "license": "MIT"

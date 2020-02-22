@@ -9,8 +9,18 @@ module.exports = async function devCommand(config) {
 
   console.log('Build for development\n')
 
+  // Optional: WebSocket connection to reload page on file change
+
+  let reloader
+
+  if (serve && serve.reload) {
+    reloader = require('../reloader/server')({
+      chalk
+    })
+  }
+
   const runTaskAction = task => getTaskAction(task.task)({
-    ...config, task, isDev: true
+    ...config, task, isDev: true, reloader
   })
 
   const buildPromises = tasks.map(runTaskAction)
@@ -30,8 +40,15 @@ module.exports = async function devCommand(config) {
     // HTML task watches and individually compiles
     if (task.task==='html') continue
 
+    const isCss = task.task==='sass'
+
     watch(task.watch, () => {
-      runTaskAction(task).catch(e => e && console.error(e.message))
+      runTaskAction(task)
+        .then(() => {
+          if (!reloader) return
+          reloader[isCss ? 'reloadCSS' : 'reload']()
+        })
+        .catch(e => e && console.error(e.message))
     })
   }
 
