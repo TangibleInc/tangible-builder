@@ -1,46 +1,60 @@
+const path = require('path')
 const glob = require('glob')
 const fsx = require('fs-extra')
 const parseDocblock = require('../tasks/docs')
+const renderDocsHtml = require('../tasks/docs/render')
 
 const defaultDocsConfig = [
   {
+    title: 'PHP',
     src: '**/*.php',
-    dest: 'docs-dev/php.json'
+    dest: 'docs-dev/generated/php.json'
   },
   {
-    src: '**/*.js',
-    dest: 'docs-dev/js.json'
+    title: 'JS',
+    src: '**/*.{js,ts,tsx}',
+    dest: 'docs-dev/generated/js.json'
   },
   {
+    title: 'SASS',
     src: '**/*.scss',
-    dest: 'docs-dev/scss.json'
+    dest: 'docs-dev/generated/scss.json'
   },
 ]
 
 module.exports = async function(config) {
 
-  console.log('Gather all DocBlock comments\n')
+  const { args = [], appRoot, appConfig, chalk } = config
 
-  const { appConfig, chalk } = config
+  if (args[0] && args[0]==='clean') {
+    console.log('Remove generated HTML and its folder')
+    await fsx.remove(path.join(appRoot, 'docs-dev', 'generated'))
+    console.log('Done')
+    return
+  }
+
   let {
     docs
   } = appConfig
 
+  console.log('Gather all DocBlock comments\n')
+
   if (!docs) {
     docs = defaultDocsConfig
 
-    console.log('Using default config\n')
-    console.log(defaultDocsConfig)
+    // console.log('Using default config\n')
+    // console.log(defaultDocsConfig)
 
   } else if (!Array.isArray(docs)) {
     docs = [docs]
   }
 
-  for (const { src, dest, exclude = [] } of docs) {
+  const allDocs = {}
 
-    const sources = !Array.isArray(src) ? src.split(',') : src
-    const globSrc = sources.length > 1 ? `{${
-      sources.join(',')
+  for (const { src, dest, exclude = [], title = 'PHP' } of docs) {
+
+    const globSrc = Array.isArray(src) ? `{${
+      src.join(',')
     }}` : src
 
     const files = glob.sync(globSrc, {
@@ -67,10 +81,37 @@ module.exports = async function(config) {
     }
 
     // Ensure the destination folder exists (otherwise create it)
-    await fsx.ensureFile(dest)
+    // await fsx.ensureFile(dest)
 
-    await fsx.writeJson(dest, docsResult, { spaces: 2 })
+    // await fsx.writeJson(dest, docsResult, { spaces: 2 })
+    // console.log(chalk.green('docs'), src, '->', dest)
 
-    console.log(chalk.green('docs'), src, '->', dest)
+    allDocs[title] = docsResult
   }
+
+  // Generate HTML page and serve
+
+  let docsTitle = ''
+
+  try {
+    const pkg = JSON.parse(await fsx.readFile(path.join(appRoot, 'package.json')))
+    docsTitle = pkg.title || pkg.name
+  } catch(e) { console.log(e) }
+
+  const allDocsDest = path.join('docs-dev', 'generated', 'index.html')
+
+  await fsx.ensureFile(allDocsDest)
+  await fsx.writeFile(allDocsDest, renderDocsHtml(allDocs, docsTitle))
+
+  console.log(chalk.green('docs'), 'generated', allDocsDest)
+
+  const serverConfig = {
+    port: 3000,
+    dir: 'docs-dev/generated'
+  }
+
+  require('./serve')({
+    appConfig: { serve: serverConfig },
+    chalk
+  })
 }

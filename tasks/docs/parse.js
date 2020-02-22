@@ -1,4 +1,4 @@
-const { regexp } = require('constants')
+const { regexp } = require('./constants')
 
 const {
 

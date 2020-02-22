@@ -14,12 +14,6 @@ module.exports = {
       watch: 'src/**/*.scss'
     }
   ],
-  docs: [
-    {
-      src: '**/*.php,src/**/*.js,src/**/*.scss',
-      dest: 'build/docs.json'
-    },
-  ],
   serve: {
     src: '.',
     port: 3000

@@ -3,7 +3,7 @@ const http = require('http')
 
 module.exports = function(config) {
 
-  const { appConfig, chalk } = config
+  const { appConfig = {}, chalk } = config
   const { serve: serveConfig = {} } = appConfig
   const {
     port = 3000,
