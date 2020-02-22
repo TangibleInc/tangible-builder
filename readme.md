@@ -80,7 +80,7 @@ npm install
 
 ## Config
 
-Place a file called `tangible.config.js` in app root folder
+Place a file called `tangible.config.js` in app root folder.
 
 #### Example
 
@@ -103,22 +103,70 @@ module.exports = {
 }
 ```
 
+### Build Tasks
+
 The property `build` is an array of build tasks.  Each task has the following schema.
 
 | Property | Description |
 |---|---|
-| `task` | `js` or `sass` |
-| `src` | source entry file |
-| `dest` | destination file |
-| `watch` | path of files to watch, in [glob syntax](https://github.com/isaacs/node-glob#glob-primer) |
+| `task` | `js`, `sass`, or `html` |
+| `src` | Source entry file (can use wildcards for html) |
+| `dest` | Destination file (must be folder for html) |
+| `watch` | Path of files to watch, in [glob syntax](https://github.com/isaacs/node-glob#glob-primer) |
 
-#### React
 
-When using React and WordPress with the global `wp.element`, add the following property to the `js` task.
+### React
+
+When building for React in the WordPress admin, add the following property to the `js` task.
 
 ```js
 react: 'wp.element'
 ```
+
+When using Preact for a compact frontend library, use the `alias` property.
+
+```js
+alias: {
+  'react': 'preact/compat',
+  'react-dom': 'preact/compat',
+}
+```
+
+
+### TypeScript
+
+For building TypeScript, change the `watch` property of the `js` task to add file extensions.
+
+```js
+watch: 'src/**/*.{js,ts,tsx}'
+```
+
+
+### Server
+
+When using `html`, you can enable a static file server.
+
+```js
+module.exports = {
+  build: [
+    // ...
+  ],
+  serve: {
+    dir: 'build',
+    port: 3000,
+    reload: true
+  }
+}
+```
+
+| Property | Description |
+|---|---|
+| `dir` | Folder to serve from, usually `build` |
+| `port` | Port for the server |
+| `reload` | Enable live-reload on file changes (optional) |
+
+The server will run during `dev` or `serve` commands.
+
 
 ## Use
 
