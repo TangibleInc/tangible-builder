@@ -15,13 +15,11 @@ module.exports = function babelTask(config) {
   const extensions = ['.js', '.jsx', '.ts', '.tsx', '.json']
 
   return new Promise((resolve, reject) => {
-
     return gulp.src(src, {
       read: true,
       allowEmpty: true
     })
       .pipe(babel(babelConfig))
-      .pipe(gulp.dest(dest))
       .on('error', function(e) {
         if (e.message) console.error(chalk.red('babel'), e.message)
         this.emit('end')
@@ -31,5 +29,6 @@ module.exports = function babelTask(config) {
         console.log(chalk.green('babel'), `${toRelative(src)} -> ${toRelative(dest)}`)
         resolve()
       })
+      .pipe(gulp.dest(dest))
   })
 }
