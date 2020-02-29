@@ -1,10 +1,6 @@
 const path = require('path')
 const watch = require('gulp-watch')
-
-const watchCommonOptions = {
-  read: false, // Only need change events, not file contents
-  followSymlinks: true
-}
+const watchCommonOptions = require('../config/watch')
 
 module.exports = async function devCommand(config) {
 
@@ -29,11 +25,15 @@ module.exports = async function devCommand(config) {
     ...config, task, isDev: true, reloader
   })
 
-  const buildPromises = tasks.map(runTaskAction)
+  const buildPromises = tasks.map(async task => {
+    try {
+      await runTaskAction(task)
+    } catch(e) {
+      console.error(chalk.red(task.task), e)
+    }
+  })
 
-  try {
-    await Promise.all(buildPromises)
-  } catch(e) { /**/ }
+  await Promise.all(buildPromises)
 
   // Watch and rebuild
 

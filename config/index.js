@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const chalk = require('chalk')
 const fileExists = require('../utils/fileExists')
@@ -16,7 +16,7 @@ const availableCommands = [
   'serve',
 ]
 
-module.exports = function createConfig() {
+module.exports = async function createConfig() {
 
   const args = process.argv.slice(2)
   const appRoot = process.cwd()
@@ -32,6 +32,23 @@ module.exports = function createConfig() {
     }
   }
 
+  // Command
+
+  const command = args[0] && availableCommands.includes(args[0])
+    ? args.shift()
+    : 'help'
+
+  const config = {
+    command, args,
+
+    appRoot, nodeModulesPath,
+
+    // Utilities for tasks
+    fs, chalk,
+    fileExists, getTaskAction,
+    toRelative: f => path.relative(appRoot, f),
+  }
+
   // App config
 
   const appConfigPath = path.join(appRoot, 'tangible.config.js')
@@ -40,6 +57,9 @@ module.exports = function createConfig() {
   if (fileExists(appConfigPath)) {
     try {
       appConfig = require(appConfigPath)
+      if (appConfig instanceof Function) {
+        appConfig = await appConfig(config)
+      }
     } catch(e) {
       console.error(e)
       process.exit(1)
@@ -48,21 +68,7 @@ module.exports = function createConfig() {
     appConfig = { build: [] }
   }
 
-  // Command
+  Object.assign(config, { appConfig, appConfigPath })
 
-  const command = args[0] && availableCommands.includes(args[0])
-    ? args.shift()
-    : 'help'
-
-  return {
-    command, args,
-    appRoot, appConfig,
-
-    appConfigPath, nodeModulesPath,
-
-    // Utilities for tasks
-    chalk,
-    fileExists, getTaskAction,
-    toRelative: f => path.relative(appRoot, f),
-  }
+  return config
 }

@@ -1,9 +1,10 @@
 const createConfig = require('./config')
 
-const config = createConfig()
-const { command } = config
+;(async () => {
 
-try {
-  const result = require(`./commands/${command}`)(config)
-  if (result && result.catch) result.catch(console.error)
-} catch(e) { console.error(e) }
+  const config = await createConfig()
+  const { command } = config
+
+  await require(`./commands/${command}`)(config)
+
+})().catch(console.error)
