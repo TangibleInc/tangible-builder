@@ -1,5 +1,9 @@
 build
+!test/build
+test/build/*
+!test/build/test.jpg
 docs-dev
+
 vendor
 node_modules
 *.log

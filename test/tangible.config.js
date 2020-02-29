@@ -12,10 +12,17 @@ module.exports = {
       src: 'src/index.scss',
       dest: 'build/app.min.css',
       watch: 'src/**/*.scss'
-    }
+    },
+    {
+      task: 'html',
+      src: 'src/**/index.html',
+      dest: 'build',
+      watch: 'src/**/index.html'
+    },
   ],
   serve: {
-    src: '.',
-    port: 3000
+    src: 'build',
+    port: 3000,
+    reload: true
   }
 }

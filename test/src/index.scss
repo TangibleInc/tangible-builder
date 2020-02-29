@@ -2,7 +2,7 @@
  * Test inline image below ~14Kb
  */
 .example::before {
-  content: url(../test.jpg);
+  content: url(../build/test.jpg);
 }
 
 /**
