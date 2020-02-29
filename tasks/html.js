@@ -1,6 +1,6 @@
 const path = require('path')
 const glob = require('glob')
-const watcher = require('gulp-watch')
+const watcher = require('../plugins/gulp-watch')
 const htmlProcessor = require('../plugins/html-processor')
 const fsp = require('fs-extra')
 const watchCommonOptions = require('../config/watch')

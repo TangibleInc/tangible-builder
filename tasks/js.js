@@ -3,7 +3,7 @@ const gulp = require('gulp')
 const browserify = require('gulp-bro')
 const rename = require('gulp-rename')
 const babelify = require('babelify')
-const uglify = require('gulp-uglify')
+const terser = require('gulp-terser');
 const $if = require('gulp-if')
 const sourcemaps = require('gulp-sourcemaps')
 
@@ -60,7 +60,7 @@ module.exports = function jsTask(config) {
       .pipe($if(isDev, sourcemaps.mapSources(function(sourcePath, file) {
         return path.join(srcRelativeToDest, sourcePath)
       })))
-      .pipe($if(!isDev, uglify()))
+      .pipe($if(!isDev, terser()))
       .pipe(rename(destFile))
       .pipe($if(isDev, sourcemaps.write()))
       .pipe(gulp.dest(destDir))

@@ -53,7 +53,7 @@ module.exports = function sassTask({
         baseDir: srcDir,
         useRelativePath: true,
         maxSize: 14 * 1024, // ~14kb
-        debug: isDev,
+        // debug: isDev,
       }))
       .pipe(autoprefixer({
         overrideBrowserslist: browsersList,

@@ -1,5 +1,5 @@
 const path = require('path')
-const watch = require('gulp-watch')
+const watch = require('../plugins/gulp-watch')
 const watchCommonOptions = require('../config/watch')
 
 module.exports = async function devCommand(config) {
@@ -39,12 +39,12 @@ module.exports = async function devCommand(config) {
 
   for (const task of tasks) {
 
-    if (!task.watch) continue
+    if (!task.watch && task.task!=='copy') continue
 
-    console.log(chalk.blue('watch'), task.watch)
+    console.log(chalk.blue('watch'), chalk.green(task.task), task.watch || task.src)
 
-    // HTML and Babel tasks watch and individually compile
-    if (task.task==='html') continue
+    // These tasks watch and individually compile
+    if (task.task==='html' || task.task==='copy') continue
     if (task.task==='babel') {
       watch(task.watch, watchCommonOptions, (f) => {
         const src = f.history[0]

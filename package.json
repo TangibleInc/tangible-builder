@@ -46,7 +46,7 @@
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
-    "gulp-uglify": "^3.0.2",
+    "gulp-terser": "^1.2.0",
     "gulp-watch": "eliot-akira/gulp-watch#custom",
     "highlight.js": "^9.18.1",
     "markdown-it": "^10.0.0",
