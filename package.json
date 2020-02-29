@@ -1,6 +1,6 @@
 {
   "name": "@tangible/builder",
-  "version": "1.3.3",
+  "version": "1.3.5",
   "description": "Build tasks: bundle assets, minify, lint, test",
   "main": "index.js",
   "bin": {
@@ -47,7 +47,6 @@
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
-    "gulp-watch": "^5.0.1",
     "gulp-watch": "eliot-akira/gulp-watch#custom",
     "highlight.js": "^9.18.1",
     "markdown-it": "^10.0.0",
@@ -58,7 +57,7 @@
     "stylelint": "^13.2.0",
     "stylelint-config-recommended": "^3.0.0",
     "stylelint-config-sass-guidelines": "^7.0.0",
-    "typescript": "^3.8.2",
+    "typescript": "^3.8.3",
     "ws": "^7.2.1"
   },
   "repository": "git@bitbucket.org:tangibleinc/tangible-builder.git",
