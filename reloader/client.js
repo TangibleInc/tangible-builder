@@ -6,7 +6,7 @@
 
   function connectSocket() {
     ws = new WebSocket('ws://'+(location.host || 'localhost').split(':')[0] + ':35729')
-    ws.onmessage = (e) => {
+    ws.onmessage = function(e) {
       var data = JSON.parse(e.data)
       if (data.reload) location.reload()
       else if (data.reloadCSS) refreshCSS()
