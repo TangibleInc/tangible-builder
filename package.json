@@ -49,6 +49,8 @@
     "gulp-uglify": "^3.0.2",
     "gulp-watch": "^5.0.1",
     "gulp-watch": "eliot-akira/gulp-watch#custom",
+    "highlight.js": "^9.18.1",
+    "markdown-it": "^10.0.0",
     "mime": "^2.4.4",
     "prettier": "^1.19.1",
     "serve-handler": "^6.1.2",

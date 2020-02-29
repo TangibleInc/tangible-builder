@@ -1,17 +1,19 @@
 const path = require('path')
 const glob = require('glob')
 const watcher = require('gulp-watch')
-const ejs = require('ejs')
+const htmlProcessor = require('../plugins/html-processor')
 const fsp = require('fs-extra')
+const watchCommonOptions = require('../config/watch')
 
 module.exports = async function htmlTask(config) {
 
   const {
     task: {
       src,
-      dest: destDir,
+      dest: destDir = config.task.destDir || 'build', // Alias and default
       watch,
-      root: rootDirs = []
+      root: rootDirs = [],
+      templateData = {}
     },
     reloader = false,
     isDev = false,
@@ -30,7 +32,6 @@ module.exports = async function htmlTask(config) {
     return
   }
 
-  const templateData = {}
   const compileProps = {
     srcBaseDir: config.srcBaseDir || src.split('/')[0] || 'src',
     destDir,
@@ -40,15 +41,21 @@ module.exports = async function htmlTask(config) {
     reloader
   }
 
+  const handleError = e => console.log(chalk.red('html'), e.message)
+
   for (const srcFile of files) {
-    await compileHtml({ srcFile, ...compileProps })
+    try {
+      await compileHtml({ srcFile, ...compileProps })
+    } catch(e) {
+      handleError(e)
+    }
   }
 
   if (!isDev || !watch) return
 
   const watchEvents = ['change', 'add']
 
-  watcher(watch, ({ event, history }) => {
+  watcher(watch, watchCommonOptions, ({ event, history }) => {
 
     if (watchEvents.indexOf(event) < 0) return
 
@@ -57,9 +64,7 @@ module.exports = async function htmlTask(config) {
         if (!reloader) return
         reloader.reload()
       })
-      .catch(e => {
-        console.log(chalk.red('html', e.message))
-      })
+      .catch(handleError)
   })
 }
 
@@ -71,15 +76,25 @@ async function compileHtml({ srcFile, srcBaseDir, destDir, chalk, toRelative, te
 
   const srcString = await fsp.readFile(srcFile, 'utf8')
 
-  let result = ejs.render(srcString, templateData)
+  let result = await htmlProcessor.render(srcString, templateData, {
+    filename: srcFile,
+    root: path.resolve(srcBaseDir)
+  })
 
   if (reloader) {
-    const reloaderClient = await fsp.readFile(
-      path.join(__dirname, '..', 'reloader', 'client.js')
-    )
-    result = result.replace('</body>', `<script>${reloaderClient}</script>`)
+    const reloaderClient = `<script>${
+      await fsp.readFile(
+        path.join(__dirname, '..', 'reloader', 'client.js')
+      )
+    }</script>`
+    if (result.indexOf('</body>') >= 0) {
+      result = result.replace('</body>', reloaderClient+'</body>')
+    } else {
+      result += reloaderClient
+    }
   }
 
+  await fsp.ensureFile(destFile) // Create any directories needed
   await fsp.writeFile(destFile, result)
 
   console.log(chalk.green('html'), `${toRelative(thisSrcFile)} -> ${toRelative(destFile)}`)
