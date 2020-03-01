@@ -33,23 +33,22 @@ module.exports = function copyTask(config) {
       })
   })
 
-  if (isDev) {
+  if (!isDev || !watch) return p
 
-    const watchEvents = ['change', 'add']
+  const watchEvents = ['change', 'add']
 
-    watcher(watch || src, watchCommonOptions, ({ event, history }) => {
+  watcher(watch || src, watchCommonOptions, ({ event, history }) => {
 
-      if (watchEvents.indexOf(event) < 0) return
-      const src = history[0] // Full path
-      const dest = src.replace(srcDirFullPath, destDirFullPath)
+    if (watchEvents.indexOf(event) < 0) return
+    const src = history[0] // Full path
+    const dest = src.replace(srcDirFullPath, destDirFullPath)
 
-      if (src===dest) return // Just in case
+    if (src===dest) return // Just in case
 
-      fs.copyFile(src, dest)
-        .then(() => console.log(chalk.green('copy'), `${toRelative(src)} -> ${toRelative(dest)}`))
-        .catch(e => console.log(chalk.red('copy'), e.message))
-    })
-  }
+    fs.copyFile(src, dest)
+      .then(() => console.log(chalk.green('copy'), `${toRelative(src)} -> ${toRelative(dest)}`))
+      .catch(e => console.log(chalk.red('copy'), e.message))
+  })
 
   return p
 }

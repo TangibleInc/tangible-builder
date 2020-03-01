@@ -39,7 +39,7 @@ module.exports = async function devCommand(config) {
 
   for (const task of tasks) {
 
-    if (!task.watch && task.task!=='copy') continue
+    if (!task.watch) continue
 
     console.log(chalk.blue('watch'), chalk.green(task.task), task.watch || task.src)
 
