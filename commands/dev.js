@@ -7,19 +7,15 @@ module.exports = async function devCommand(config) {
   const { appConfig, getTaskAction, chalk } = config
   const { build: tasks = [], serve } = appConfig
 
-  if (!tasks.length) throw 'No build tasks found'
+  if (!tasks.length && !serve) throw 'No build tasks found'
 
   console.log('Build for development\n')
 
   // Optional: WebSocket connection to reload page on file change
 
-  let reloader
-
-  if (serve && serve.reload) {
-    reloader = require('../reloader/server')({
-      chalk
-    })
-  }
+  const reloader = !serve || serve.reload===false ? false : await require('../reloader/server')({
+    chalk
+  })
 
   const runTaskAction = task => getTaskAction(task.task)({
     ...config, task, isDev: true, reloader
@@ -71,5 +67,5 @@ module.exports = async function devCommand(config) {
     })
   }
 
-  if (serve) require('./serve')(config)
+  if (serve) require('../tasks/serve')({ ...config, task: serve, isDev: true, reloader })
 }

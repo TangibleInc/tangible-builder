@@ -1,16 +1,19 @@
 const ws = require('ws')
+const getPort = require('get-port')
 
 let server
 let logger
 
-module.exports = function liveReloadServer(options = {}) {
+module.exports = async function liveReloadServer(options = {}) {
 
   // Port must be the same in client.js
   const { port = 35729, chalk } = options
 
   logger = (...args) => console.log(chalk.green('reload'), ...args)
 
-  if (!server) server = new ws.Server({ port })
+  const availablePort = await getPort({ port: getPort.makeRange(port, port + 100) })
+
+  if (!server) server = new ws.Server({ port: availablePort })
 
   let firstTime = true
   server.on('connection', () => {
@@ -19,9 +22,9 @@ module.exports = function liveReloadServer(options = {}) {
     firstTime = false
   })
 
-  logger('server listening')
+  logger(`WebSocket server listening at port ${availablePort}`)
 
-  return { reload, reloadCSS }
+  return { reload, reloadCSS, availablePort }
 }
 
 let scheduleReload

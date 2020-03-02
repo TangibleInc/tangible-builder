@@ -21,8 +21,7 @@ module.exports = {
     },
   ],
   serve: {
-    src: 'build',
-    port: 3000,
-    reload: true
+    dir: 'build',
+    port: 3000
   }
 }

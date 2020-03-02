@@ -1,5 +1,6 @@
 const fs = require('fs-extra')
 const path = require('path')
+const minimist = require('minimist')
 const chalk = require('chalk')
 const fileExists = require('../utils/fileExists')
 const getTaskAction = require('../utils/getTaskAction')
@@ -11,14 +12,16 @@ const availableCommands = [
   'docs',
   'gitl',
   'help',
-  'init',
+  'new',
   'lint',
   'serve',
 ]
 
 module.exports = async function createConfig() {
 
-  const args = process.argv.slice(2)
+  const options = minimist(process.argv.slice(2))
+  const args = options._
+
   const appRoot = process.cwd()
 
   // Make sure node_modules exist
@@ -39,7 +42,7 @@ module.exports = async function createConfig() {
     : 'help'
 
   const config = {
-    command, args,
+    command, args, options,
 
     appRoot, nodeModulesPath,
 

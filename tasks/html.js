@@ -7,10 +7,15 @@ const watchCommonOptions = require('../config/watch')
 
 module.exports = async function htmlTask(config) {
 
+  // Backward compatibility
+  if (config.dest || config.destFolder) {
+    config.destFolder = config.dest || config.destDir
+  }
+
   const {
     task: {
       src,
-      dest: destDir = config.task.destDir || 'build', // Alias and default
+      destFolder = 'build', // Alias and default
       watch,
       root: rootDirs = [],
       templateData = {}
@@ -34,7 +39,7 @@ module.exports = async function htmlTask(config) {
 
   const compileProps = {
     srcBaseDir: config.srcBaseDir || src.split('/')[0] || 'src',
-    destDir,
+    destFolder,
     chalk,
     toRelative,
     templateData,
@@ -68,11 +73,11 @@ module.exports = async function htmlTask(config) {
   })
 }
 
-async function compileHtml({ srcFile, srcBaseDir, destDir, chalk, toRelative, templateData = {}, reloader }) {
+async function compileHtml({ srcFile, srcBaseDir, destFolder, chalk, toRelative, templateData = {}, reloader }) {
 
   const thisSrcFile = toRelative(srcFile)
   const srcFileName = thisSrcFile.slice(srcBaseDir.length+1)
-  const destFile = destDir.indexOf('.')>0 ? destDir : destDir + '/' + srcFileName
+  const destFile = destFolder.indexOf('.')>0 ? destFolder : destFolder + '/' + srcFileName
 
   const srcString = await fsp.readFile(srcFile, 'utf8')
 
@@ -86,7 +91,8 @@ async function compileHtml({ srcFile, srcBaseDir, destDir, chalk, toRelative, te
       await fsp.readFile(
         path.join(__dirname, '..', 'reloader', 'client.js')
       )
-    }</script>`
+    }</script>`.replace('%WEBSOCKET_PORT%', reloader.availablePort)
+
     if (result.indexOf('</body>') >= 0) {
       result = result.replace('</body>', reloaderClient+'</body>')
     } else {
