@@ -68,7 +68,14 @@ module.exports = async function createConfig() {
       process.exit(1)
     }
   } else {
-    appConfig = { build: [] }
+    appConfig = {
+      build: [],
+      serve: {
+        src: 'src',
+        dest: 'build',
+        port: 3000
+      }
+    }
   }
 
   Object.assign(config, { appConfig, appConfigPath })

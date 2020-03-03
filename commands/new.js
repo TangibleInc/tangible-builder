@@ -122,7 +122,7 @@ const main = async ({ args, options }) => {
       name: projectName,
       scripts: {
         dev: 'tgb dev',
-        build: 'tgb dev',
+        build: 'tgb build',
         beautify: 'tgb beautify',
       },
       dependencies: {},
