@@ -86,6 +86,7 @@ module.exports = async function(config) {
       let indexSrcFile
       do {
         const checkDir = path.join(srcFullPath, path.join(...dirParts))
+
         if (foldersWithIndex[srcExtension]
           && foldersWithIndex[srcExtension][checkDir]
           && foldersWithIndex.html[checkDir] // Must contain index.html
@@ -93,7 +94,12 @@ module.exports = async function(config) {
           indexSrcFile = path.join(checkDir, `index.${srcExtension}`)
           console.log(chalk.blue('serve'), `index of ${srcFileRelative}`, '->', path.relative(appRoot, indexSrcFile))
         }
+
+        // Check source root once
+        if (dirParts.length===1 && dirParts[0]!=='.') dirParts.unshift('.')
+
         dirParts.pop()
+
       } while (dirParts.length)
 
       if (!indexSrcFile) {
