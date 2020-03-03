@@ -62,7 +62,17 @@ module.exports = async function(config) {
   }
 
   let initialRun = true
+
+  // Find all index.html at the start - watcher can add new
+  // These will be considered "page folders"
+  const allIndexHtml = glob.sync(path.join(src, '**', 'index.html'))
   const foldersWithIndex = {
+
+    html: allIndexHtml.reduce((obj, key) => {
+      obj[ path.resolve(path.dirname(key)) ] = true
+      return obj
+    }, {})
+
     // extension: { folder: true, ... }
   }
 
@@ -75,10 +85,18 @@ module.exports = async function(config) {
     const srcFileDir = path.dirname(srcFile)
     const srcFileRelative = path.relative(appRoot, srcFile)
 
-    if (srcBase!=='index') {
+    if (srcBase==='index' && (srcExtension==='html' || foldersWithIndex.html[ srcFileDir ])) {
+
+      if (!foldersWithIndex[srcExtension]) {
+        foldersWithIndex[srcExtension] = {}
+      }
+      foldersWithIndex[srcExtension][ srcFileDir ] = true
+
+    } else {
 
       if (initialRun) return
-      // Find closest folder with index.{extension}
+
+      // Find closest page folder with index.{extension}
 
       const relativeSrcFileDir = path.relative(srcFullPath, srcFileDir)
       const dirParts = relativeSrcFileDir.split('/')
@@ -92,7 +110,9 @@ module.exports = async function(config) {
           && foldersWithIndex.html[checkDir] // Must contain index.html
         ) {
           indexSrcFile = path.join(checkDir, `index.${srcExtension}`)
-          console.log(chalk.blue('serve'), `index of ${srcFileRelative}`, '->', path.relative(appRoot, indexSrcFile))
+
+          console.log(chalk.blue(event), srcFileRelative)
+          // console.log(chalk.blue('serve'), `index of ${srcFileRelative}`, '->', path.relative(appRoot, indexSrcFile))
         }
 
         // Check source root once
@@ -103,17 +123,11 @@ module.exports = async function(config) {
       } while (dirParts.length)
 
       if (!indexSrcFile) {
-        console.log(chalk.red('serve'), `Couldn't find destination for ${srcFileRelative}`)
+        console.log(chalk.red('serve'), `Couldn't find parent folder with index.html for ${srcFileRelative}`)
         return
       }
 
       srcFile = indexSrcFile
-
-    } else {
-      if (!foldersWithIndex[srcExtension]) {
-        foldersWithIndex[srcExtension] = {}
-      }
-      foldersWithIndex[srcExtension][ srcFileDir ] = true
     }
 
     const destFile = srcFile
