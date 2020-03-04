@@ -2,9 +2,9 @@
 module.exports = async function buildCommand(config) {
 
   const { appConfig, getTaskAction } = config
-  const { build: tasks = [] } = appConfig
+  const { build: tasks = [], serve } = appConfig
 
-  if (!tasks.length) throw 'No build tasks found'
+  if (!tasks.length && !serve) throw 'No build tasks found'
 
   console.log('Build for production\n')
 
@@ -17,4 +17,6 @@ module.exports = async function buildCommand(config) {
   } catch(e) {
     throw e
   }
+
+  if (serve) require('../tasks/serve')({ ...config, task: serve, build: true })
 }

@@ -3,7 +3,21 @@ const browsersList = require('./browsers')
 
 module.exports = function createBabelConfig(config) {
 
-  const { src, root, alias, react = 'React' } = config.task || {}
+  const { src, root } = config.task || {}
+  const { appRoot, appConfig = {}, packageJson } = config
+
+  // If Preact is installed, automatically create alias
+  if ((packageJson.dependencies && packageJson.dependencies.preact)
+    || (packageJson.devDependencies && packageJson.devDependencies.preact)
+  ) {
+    appConfig.react = appConfig.react || 'preact'
+  }
+
+  let { alias, react = appConfig.react || 'React' } = config.task || {}
+  if (react==='preact') {
+    react = 'React' // For pragma
+    alias = { 'react': 'preact/compat', 'react-dom': 'preact/compat', ...(alias || {}) }
+  }
 
   const babelConfig = {
     presets: [
@@ -65,7 +79,6 @@ module.exports = function createBabelConfig(config) {
       // * https://babeljs.io/docs/en/next/babel-plugin-proposal-object-rest-spread
       require.resolve('@babel/plugin-proposal-object-rest-spread'),
 
-
       ...(react==='wp.element'
         ? []
         // Adds `import React from 'react'` if JSX is used
@@ -76,8 +89,10 @@ module.exports = function createBabelConfig(config) {
 
   if (root || alias) babelConfig.plugins.push(
     [require.resolve('babel-plugin-module-resolver'), {
+      cwd: appRoot,
       root: typeof root==='string' ? [root] : root,
-      alias
+      alias,
+      extensions: ['.js', '.jsx', '.ts', '.tsx']
     }]
   )
 

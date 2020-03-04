@@ -35,6 +35,11 @@ module.exports = async function createConfig() {
     }
   }
 
+  const packageJson = {}
+  try {
+    Object.assign(packageJson, await fs.readJson(path.join(appRoot, 'package.json')))
+  } catch(e) {}
+
   // Command
 
   const command = args[0] && availableCommands.includes(args[0])
@@ -78,7 +83,7 @@ module.exports = async function createConfig() {
     }
   }
 
-  Object.assign(config, { appConfig, appConfigPath })
+  Object.assign(config, { appConfig, appConfigPath, packageJson })
 
   return config
 }
