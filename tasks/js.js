@@ -34,7 +34,7 @@ module.exports = function jsTask(config) {
   }
 
   const babelConfig = createBabelConfig(config)
-  const extensions = ['.js', '.jsx', '.ts', '.tsx', '.json']
+  const extensions = ['.js', '.jsx', '.ts', '.tsx']
 
   return new Promise((resolve, reject) => {
 
