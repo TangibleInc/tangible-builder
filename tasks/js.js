@@ -13,10 +13,16 @@ const createBabelConfig = require('../config/babel')
 module.exports = function jsTask(config) {
 
   const {
-    task: { src, dest, root: rootDirs = [] },
+    task: { src, dest },
     isDev = false,
     toRelative, chalk, fileExists,
   } = config
+
+  let {
+    task: { root: rootDirs = [] }
+  } = config
+
+  if (typeof rootDirs==='string') rootDirs = [rootDirs]
 
   const srcDir = path.dirname(src)
   const destDir = path.dirname(dest)
@@ -49,11 +55,12 @@ module.exports = function jsTask(config) {
           [babelify.configure(babelConfig), { extensions }],
           svgify
         ],
+        basedir: rootDirs.length ? rootDirs[0] : srcDir,
         // Resolve require paths
         paths: [
           path.resolve(srcDir),
+          ...rootDirs.map(f => path.resolve(f)),
           includedNodeModulesPath,
-          ...(typeof rootDirs==='string' ? [rootDirs] : rootDirs)
         ]
       }))
       .pipe($if(isDev, sourcemaps.init({ loadMaps: true })))
