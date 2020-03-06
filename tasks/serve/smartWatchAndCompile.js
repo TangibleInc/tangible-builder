@@ -144,6 +144,7 @@ function compileOnWatch({
     srcFile = indexSrcFile
   }
 
+  // const pageName = path.relative(srcFullPath, srcFile).split('/').slice(0, -1).join('.')
   const destFile = srcFile
     .replace(srcFullPath, destFullPath)
     .replace(`.${srcExtension}`, `.${

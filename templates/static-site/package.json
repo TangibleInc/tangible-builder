@@ -1,0 +1,10 @@
+{
+  "name": "<%- projectName %>",
+  "scripts": {
+    "dev": "tgb dev",
+    "build": "tgb build"
+  },
+  "devDependencies": {
+    "@tangible/builder": "1.x"
+  }
+}

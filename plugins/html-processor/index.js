@@ -21,6 +21,7 @@ module.exports = {
     // The regex "s" flag makes "." match any character including new lines
     return (await ejs.render(str, data, {
       async: true,
+      _with: true,
       ...options
     })).replace(/<markdown>(.*?)<\/markdown>/gs, function(match, p1) {
       return renderMarkdown(p1)

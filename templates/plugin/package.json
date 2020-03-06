@@ -1,0 +1,15 @@
+{
+  "name": "<% projectName %>",
+  "title": "<% projectTitle %>",
+  "productId": false,
+  "private": true,
+  "scripts": {
+    "dev": "tgb dev",
+    "build": "tgb build",
+    "lint": "tgb lint",
+    "beautify": "tgb beautify"
+  },
+  "devDependencies": {
+    "@tangible/builder": "*"
+  }
+}

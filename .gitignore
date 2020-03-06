@@ -2,7 +2,7 @@ build
 !test/build
 test/build/*
 !test/build/test.jpg
-docs-dev
+test/docs-dev
 
 vendor
 node_modules
