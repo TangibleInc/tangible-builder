@@ -46,7 +46,7 @@ class <%- projectNamePascalCase %> {
 
     // Features loaded will have $framework and $<%- projectNameSnakeCase %> in their scope
 
-    // require __DIR__.'/includes/index.php';
+    require __DIR__.'/includes/index.php';
   }
 }
 

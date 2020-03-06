@@ -138,7 +138,7 @@ const main = async ({ args, options }) => {
   }
 
   console.log('Done.\n')
-  console.log(`Start by running: cd ${projectFolder} && npm install`)
+  console.log(`Start by running: cd ${projectFolder} && npm install${projectType==='plugin' ? ' && composer install' : ''}`)
   console.log(`Then: npm run dev`)
 }
 
