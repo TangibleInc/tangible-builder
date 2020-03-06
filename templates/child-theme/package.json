@@ -1,6 +1,6 @@
 {
-  "name": "<% projectName %>",
-  "title": "<% projectTitle %>",
+  "name": "<%- projectName %>",
+  "title": "<%- projectTitle %>",
   "productId": false,
   "private": true,
   "scripts": {

@@ -1,4 +1,4 @@
-# <% projectTitle %>
+# <%- projectTitle %>
 
 ## Requirement
 
