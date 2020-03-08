@@ -1,6 +1,13 @@
 
 // Based on: https://github.com/rstacruz/markdown-it-decorate
 
+/**
+ * Text <!-- {.center} -->
+ * <-- {.center.red} -->
+ * <-- {data-show="true"} -->
+ * <-- {blockquote:.red} -->
+ */
+
 /* eslint-disable no-cond-assign */
 
 var tagExpr = /^<!-- ?\{(?:([a-z0-9]+)(\^[0-9]*)?: ?)?(.*)\} ?-->\n?$/
