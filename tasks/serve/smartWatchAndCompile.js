@@ -95,6 +95,8 @@ function compileOnWatch({
   const { chalk } = config
 
   const srcExtension = path.extname(srcFile).slice(1)
+  const isJavaScript = srcExtension.match(/jsx?|tsx?/)
+
   const srcBase = path.basename(srcFile).replace(`.${srcExtension}`, '')
   const srcFileDir = path.dirname(srcFile)
   const srcFileRelative = path.relative(appRoot, srcFile)
@@ -110,7 +112,7 @@ function compileOnWatch({
 
     if (initialRun) return
 
-    // Find closest page folder with index.{extension}
+    // Find closest page folder and index.{extension}
 
     const relativeSrcFileDir = path.relative(srcFullPath, srcFileDir)
     const dirParts = relativeSrcFileDir.split('/')
@@ -118,15 +120,18 @@ function compileOnWatch({
     let indexSrcFile
     do {
       const checkDir = path.join(srcFullPath, path.join(...dirParts))
+      const checkExtensions = isJavaScript ? ['js', 'jsx', 'ts', 'tsx'] : [srcExtension]
 
-      if (foldersWithIndex[srcExtension]
-        && foldersWithIndex[srcExtension][checkDir]
-        && foldersWithIndex.html[checkDir] // Must contain index.html
-      ) {
-        indexSrcFile = path.join(checkDir, `index.${srcExtension}`)
-
-        console.log(chalk.blue(event), srcFileRelative)
-        // console.log(chalk.blue('serve'), `index of ${srcFileRelative}`, '->', path.relative(appRoot, indexSrcFile))
+      for (const extension of checkExtensions) {
+        if (foldersWithIndex[extension]
+          && foldersWithIndex[extension][checkDir]
+          // Page folder must contain index.html
+          && foldersWithIndex.html[checkDir]
+        ) {
+          indexSrcFile = path.join(checkDir, `index.${extension}`)
+          console.log(chalk.blue(event), srcFileRelative)
+          // console.log(chalk.blue('serve'), `index of ${srcFileRelative}`, '->', path.relative(appRoot, indexSrcFile))
+        }
       }
 
       // Check source root once
@@ -137,7 +142,7 @@ function compileOnWatch({
     } while (dirParts.length)
 
     if (!indexSrcFile) {
-      console.log(chalk.red('serve'), `Couldn't find parent folder with index.html for ${srcFileRelative}`)
+      console.log(chalk.red('serve'), `Couldn't find parent folder with index.html for ${srcFileRelative}`, foldersWithIndex)
       return
     }
 
