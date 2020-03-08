@@ -120,7 +120,7 @@ const main = async ({ args, options }) => {
     parentThemeSlug: answers.parentThemeSlug
   }
 
-  const templateFiles = glob.sync(path.join(templateFolder, '**', '*.*'))
+  const templateFiles = glob.sync(path.join(templateFolder, '**', '{*.*,.*}'))
 
   for (const templateFile of templateFiles) {
 
