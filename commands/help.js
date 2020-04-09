@@ -1,5 +1,7 @@
 module.exports = (config) => {
   console.log(`
+Tangible Builder - https://docs.tangible.one/modules/builder/
+
 Usage: tgb [command] (...options)
 
 Commands:
