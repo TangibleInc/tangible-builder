@@ -4,7 +4,7 @@ Usage: tgb [command] (...options)
 
 Commands:
 
-init - Create initial config file
+new - Create initial config file
 help - Show this help message
 
 dev - Build for development
