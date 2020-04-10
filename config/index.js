@@ -14,6 +14,7 @@ const availableCommands = [
   'help',
   'new',
   'lint',
+  'schema',
   'serve',
 ]
 

@@ -16,7 +16,11 @@ lint - Lint code and show any warnings for syntax/fromatting
 beautify - Beautify code - Make sure to Git commit before running
 
 docs - Gather DocBlock comments into a JSON file
+schema - Compile tangible.schema.ts files to JSON schema
+
 gitl - Manage Git child repos
 serve - Start static file server
-${config.notFound ? `\nConfig not found: Place a file called "tangible.config.js" in app root folder` : ''}`)
+${
+  config.notFound ? `\nConfig not found: Place a file called "tangible.config.js" in app root folder` : ''
+}`)
 }

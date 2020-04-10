@@ -1,6 +1,6 @@
 # Tangible Builder
 
-Bundle assets, minify, lint, test
+Develop, build, beautify, schema, docs, test, serve
 
 ## Requirement
 
@@ -8,62 +8,13 @@ Bundle assets, minify, lint, test
 
 ## Install
 
-There are two ways to install this tool, as a Composer or NPM module.
-
-#### As a Composer module
-
-Add to (or create) in `composer.json`
-
-```json
-{
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@bitbucket.org:/tangibleinc/tangible-builder.git"
-    }
-  ],
-  "require": {
-    "tangible/builder": "dev-master"
-  },
-  "minimum-stability": "dev"
-}
-```
-
-Add to (or create) in `package.json`
-
-```json
-{
-  "scripts": {
-    "dev": "./vendor/tangible/builder/run dev",
-    "build": "./vendor/tangible/builder/run build",
-    "lint": "./vendor/tangible/builder/run lint",
-    "beautify": "./vendor/tangible/builder/run beautify"
-  },
-  "devDependencies": {
-    "@tangible/builder": "*"
-  }
-}
-```
-
-Then run the following commands to install.
-
-```sh
-composer install
-npm install
-```
-
-#### As a local NPM module
-
 Add to `package.json`
 
 ```json
 {
   "scripts": {
-    "postinstall": "cd node_modules/@tangible/builder && composer install",
     "dev": "tgb dev",
-    "build": "tgb build",
-    "lint": "tgb lint",
-    "beautify": "tgb beautify"
+    "build": "tgb build"
   },
   "devDependencies": {
     "@tangible/builder": "*"
@@ -77,6 +28,7 @@ Install
 npm install
 ```
 
+From the project root folder, the builder is available on the command line as `npx tgb`. Run it to show command descriptions.
 
 ## Config
 

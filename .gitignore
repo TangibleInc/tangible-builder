@@ -3,6 +3,7 @@ build
 test/build/*
 !test/build/test.jpg
 test/docs-dev
+test/tangible.schema.json
 
 vendor
 node_modules
