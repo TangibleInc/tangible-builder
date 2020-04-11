@@ -4,8 +4,9 @@ test/build/*
 !test/build/test.jpg
 test/docs-dev
 test/tangible.schema.json
-
+plugins/schema-processor/index.d.ts
 plugins/schema-processor/index.js
+plugins/schema-processor/index.js.map
 
 vendor
 node_modules

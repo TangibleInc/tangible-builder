@@ -1,13 +1,14 @@
 {
   "name": "@tangible/builder",
-  "version": "1.4.4",
+  "version": "1.4.6",
   "description": "Tangible Builder: Develop, build, beautify, schema, docs, test, serve",
   "main": "index.js",
   "bin": {
     "tgb": "./run"
   },
   "scripts": {
-    "build": "tsc -p plugins/schema-processor",
+    "build": "cd plugins/schema-processor && tsc -p .",
+    "release": "npm publish && cd plugins/schema-processor && npm publish",
     "test-dev": "cd test && ../run dev",
     "test-lint": "cd test && ../run lint",
     "test-beautify": "cd test && ../run beautify",

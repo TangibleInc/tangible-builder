@@ -17,6 +17,16 @@ export interface Config {
    * More here
    */
   path?: string
+
+  /**
+   * Function
+   *
+   * @args Arguments
+   * @args More agruments
+   * @return Return type
+   */
+  fn: (args: any[]) => any[]
+
   type?: string
   tsconfig?: string
   expose: "all" | "none" | "export"

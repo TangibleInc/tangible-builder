@@ -42,13 +42,13 @@ module.exports = async function renderSchemaFile({
 
     // console.log(inspect(schema, { depth: Infinity, colors: true, compact: false }))
 
-    if (!schema) {
+    if (!schema || !schema.definitions) {
       // Error message displayed by compiler
       console.log(chalk.red('schema'), schemaFileName, '->', jsonFileName)
       return
     }
 
-    await fsx.writeFile(jsonFilePath, JSON.stringify(schema, null, 2))
+    await fsx.writeFile(jsonFilePath, JSON.stringify(schema.definitions, null, 2))
 
     console.log(chalk.green('schema'), schemaFileName, '->', jsonFileName)
 

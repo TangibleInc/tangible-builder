@@ -534,6 +534,7 @@ export class JsonSchemaGenerator {
                 definition.additionalProperties = true;
             } else {
                 const value = extractLiteralValue(propertyType);
+
                 if (value !== undefined) {
                     definition.type = typeof value;
                     definition.enum = [ value ];
@@ -933,6 +934,7 @@ export class JsonSchemaGenerator {
                 }
             }
         }
+
         return definition;
     }
 
@@ -974,9 +976,22 @@ export class JsonSchemaGenerator {
             reffedType = undefined;
         }
 
-        if (this.args.typeOfKeyword && (typ.flags & ts.TypeFlags.Object) && ((<ts.ObjectType>typ).objectFlags & ts.ObjectFlags.Anonymous)) {
-            definition.typeof = "function";
-            return definition;
+        if (
+          (this.args.typeOfKeyword && (typ.flags & ts.TypeFlags.Object) && ((<ts.ObjectType>typ).objectFlags & ts.ObjectFlags.Anonymous))
+          || ((<ts.ObjectType>typ).objectFlags & ts.ObjectFlags.Anonymous)
+        ) {
+          definition.type = "function"; // was definition.typeof
+
+          /**
+           * TODO: Extract function arguments?
+           * @see node_modules/typescript/typescript.d.ts
+           */
+
+          // console.log('function', typ.symbol, typ.flags, (<ts.ObjectType>typ).objectFlags)
+
+          // return definition; // Continue to parse comments
+        } else {
+          // console.log('not function', this.args, typ.flags, (<ts.ObjectType>typ).objectFlags)
         }
 
         let returnedDefinition = definition; // returned definition, may be a $ref
