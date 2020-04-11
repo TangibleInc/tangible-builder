@@ -1,6 +1,6 @@
 {
   "name": "@tangible/schema-processor",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Render Typescript definitions to JSON schema",
   "main": "index.js",
   "scripts": {
