@@ -2,8 +2,10 @@ const fsx = require('fs-extra')
 const path = require('path')
 const { inspect } = require('util')
 const glob = require('glob')
-const tsj = require('ts-json-schema-generator')
 const chalk = require('chalk')
+
+const schemaProcessor = require('@tangible/schema-processor')
+// const schemaProcessor = require('../plugins/schema-processor')
 
 module.exports = async function schemaCommand(config) {
 
@@ -45,31 +47,23 @@ async function renderSchemaFile({
     return
   }
 
-  const generatorConfig = {
-    path: schemaFilePath,
-
-    // "exclude" option doesn't work for some reason
-    // tsconfig: path.join(__dirname, '..', 'config', 'tsconfig.json'),
-
-    type: '*', // Or <type-name> if you want to generate schema for that one type only
-    expose: 'all', //
-    jsDoc: 'extended',
-    topRef: true,
-    typeCheck: false
-  }
-
   const jsonFileName = schemaFileName.replace('.ts', '.json')
   const jsonFilePath = path.join(appRoot, jsonFileName)
 
   try {
-    const schema = tsj
-      .createGenerator(generatorConfig)
-      .createSchema(generatorConfig.type)
-    const schemaString = JSON.stringify(schema, null, 2)
 
-    await fsx.writeFile(jsonFilePath, schemaString)
+    // Based on https://github.com/YousefED/typescript-json-schema
+
+    const basePath = appRoot
+    const compilerOptions = {}
+    const settings = {}
+
+    const program = schemaProcessor.getProgramFromFiles([schemaFilePath], compilerOptions, basePath);
+    const schema = schemaProcessor.generateSchema(program, '*', settings);
 
     // console.log(inspect(schema, { depth: Infinity, colors: true, compact: false }))
+
+    await fsx.writeFile(jsonFilePath, JSON.stringify(schema, null, 2))
 
     console.log(chalk.green('schema'), schemaFileName, '->', jsonFileName)
 

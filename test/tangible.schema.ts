@@ -1,16 +1,18 @@
-import { Something } from './import.schema'
+export * from './import.schema'
 
 /**
- * @title Configuration
- * @description
+ * Configuration
+ *
  * Description?
  *
- * Long.
+ * @var this that other
+ * @see that
+ * @see another
  */
 export interface Config {
   /**
-   * @title The path
-   * @description
+   * The path
+   *
    * More here
    */
   path?: string
@@ -21,7 +23,7 @@ export interface Config {
   jsDoc: "none" | "extended" | "basic"
   sortProps?: boolean
   strictTuples?: boolean
-  skipTypeCheck?: Something
+  skipTypeCheck?: boolean
   encodeRefs?: boolean
   extraTags?: string[]
 }

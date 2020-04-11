@@ -5,6 +5,8 @@ test/build/*
 test/docs-dev
 test/tangible.schema.json
 
+plugins/schema-processor/index.js
+
 vendor
 node_modules
 *.log

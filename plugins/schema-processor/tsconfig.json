@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+      "target": "es5",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "outDir": ".",
+      "noEmit": false,
+      "declaration": false,
+      "sourceMap": false,
+      "isolatedModules": false,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": false,
+      "noImplicitAny": false,
+      "suppressImplicitAnyIndexErrors": true,
+      "strictNullChecks": false,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "removeComments": true,
+      "noLib": false,
+      "preserveConstEnums": true,
+      "watch": false,
+      "typeRoots" : ["node_modules/@types"]
+  },
+  "include": [
+      "**/*.ts",
+      "node_modules/@types/**/*.d.ts"
+  ],
+  "exclude": [
+      "node_modules",
+      "example",
+      "test/programs",
+      "dist"
+  ],
+  "compileOnSave": true,
+  "buildOnSave": false
+}

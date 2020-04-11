@@ -1,15 +1,17 @@
 {
   "name": "@tangible/builder",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Tangible Builder: Develop, build, beautify, schema, docs, test, serve",
   "main": "index.js",
   "bin": {
     "tgb": "./run"
   },
   "scripts": {
+    "build": "tsc -p plugins/schema-processor",
     "test-dev": "cd test && ../run dev",
     "test-lint": "cd test && ../run lint",
     "test-beautify": "cd test && ../run beautify",
+    "test-schema": "cd test && ../run schema",
     "test-serve": "cd test && ../run serve",
     "test-build": "cd test && ../run build"
   },
@@ -28,6 +30,7 @@
     "@babel/preset-env": "^7.8.6",
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
+    "@tangible/schema-processor": "1",
     "@wordpress/browserslist-config": "^2.6.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "babelify": "^10.0.0",
@@ -60,7 +63,6 @@
     "stylelint": "^13.2.0",
     "stylelint-config-recommended": "^3.0.0",
     "stylelint-config-sass-guidelines": "^7.0.0",
-    "ts-json-schema-generator": "^0.65.0",
     "typescript": "^3.8.3",
     "ws": "^7.2.1"
   },
