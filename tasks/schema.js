@@ -31,7 +31,10 @@ module.exports = async function renderSchemaFile({
     // Based on https://github.com/YousefED/typescript-json-schema
 
     const basePath = appRoot
-    const compilerOptions = {}
+    const compilerOptions = {
+      'lib': ['dom', 'es2015', 'es2016', 'es2017', 'esnext'],
+      'jsx': 'preserve'
+    }
     const settings = {}
 
     const program = schemaProcessor.getProgramFromFiles([schemaFilePath], compilerOptions, basePath);
