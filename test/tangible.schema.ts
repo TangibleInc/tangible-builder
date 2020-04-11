@@ -1,3 +1,4 @@
+import { Something } from './import.schema'
 export * from './import.schema'
 
 /**
@@ -23,7 +24,7 @@ export interface Config {
   jsDoc: "none" | "extended" | "basic"
   sortProps?: boolean
   strictTuples?: boolean
-  skipTypeCheck?: boolean
+  skipTypeCheck?: Something
   encodeRefs?: boolean
   extraTags?: string[]
 }

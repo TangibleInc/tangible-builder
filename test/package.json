@@ -2,6 +2,6 @@
   "name": "test-project",
   "scripts": {
     "dev": "tgb dev",
-    "build": "tgb build && tgb schema"
+    "build": "tgb build"
   }
 }

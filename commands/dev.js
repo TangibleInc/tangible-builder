@@ -35,13 +35,18 @@ module.exports = async function devCommand(config) {
 
   for (const task of tasks) {
 
-    if (!task.watch) continue
+    if (task.task==='schema' && typeof task.watch==='undefined') {
+      task.watch = true
+    }
 
-    console.log(chalk.blue('watch'), chalk.green(task.task), task.watch || task.src)
+    if (!task.watch) continue
+    if (task.watch===true) task.watch = task.src
+
+    console.log(chalk.blue('watch'), chalk.green(task.task), task.watch)
 
     // These tasks watch and individually compile
     if (task.task==='html' || task.task==='copy') continue
-    if (task.task==='babel') {
+    if (task.task==='babel' || task.task==='schema') {
       watch(task.watch, watchCommonOptions, (f) => {
         const src = f.history[0]
         if (!src) return // TODO: Handle remove file?

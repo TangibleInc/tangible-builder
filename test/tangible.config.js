@@ -19,6 +19,11 @@ module.exports = {
       dest: 'build',
       watch: 'src/**/index.html'
     },
+    {
+      task: 'schema',
+      src: 'tangible.schema.ts',
+      dest: 'tangible.schema.json',
+    }
   ],
   serve: {
     dir: 'build',
