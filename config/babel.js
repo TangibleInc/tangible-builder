@@ -79,6 +79,8 @@ module.exports = function createBabelConfig(config) {
       // * https://babeljs.io/docs/en/next/babel-plugin-proposal-object-rest-spread
       require.resolve('@babel/plugin-proposal-object-rest-spread'),
 
+      require.resolve('@babel/plugin-transform-runtime'),
+
       ...(react==='wp.element'
         ? []
         // Adds `import React from 'react'` if JSX is used
