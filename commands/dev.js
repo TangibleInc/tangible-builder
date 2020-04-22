@@ -33,6 +33,11 @@ module.exports = async function devCommand(config) {
 
   // Watch and rebuild
 
+  // Support terminate signal from another process, i.e., tests running concurrently
+  process.on('SIGTERM', function() {
+    process.exit()
+  })
+
   for (const task of tasks) {
 
     if (task.task==='schema' && typeof task.watch==='undefined') {
