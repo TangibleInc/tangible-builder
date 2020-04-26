@@ -11,13 +11,16 @@ module.exports = function babelTask(config) {
     toRelative, chalk, fileExists,
   } = config
 
-  const babelConfig = createBabelConfig(config)
+  const babelConfig = createBabelConfig({ ...config, isServer: true })
   const extensions = ['.js', '.jsx', '.ts', '.tsx']
 
   return new Promise((resolve, reject) => {
     return gulp.src(src, {
+      // https://gulpjs.com/docs/en/api/src#options
       read: true,
-      allowEmpty: true
+      allowEmpty: true,
+      resolveSymlinks: true,
+      follow: true
     })
       .pipe(babel(babelConfig))
       .on('error', function(e) {

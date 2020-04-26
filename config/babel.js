@@ -4,7 +4,7 @@ const browsersList = require('./browsers')
 module.exports = function createBabelConfig(config) {
 
   const { src, root } = config.task || {}
-  const { appRoot, appConfig = {}, packageJson } = config
+  const { appRoot, appConfig = {}, packageJson, isServer } = config
 
   // If Preact is installed, automatically create alias
   if ((packageJson.dependencies && packageJson.dependencies.preact)
@@ -23,7 +23,7 @@ module.exports = function createBabelConfig(config) {
     presets: [
       [require.resolve('@babel/preset-env'),
         { modules: 'commonjs',
-          targets: config.isServer
+          targets: isServer
             ? { node: 'current' }
             : browsersList
         }
@@ -79,7 +79,9 @@ module.exports = function createBabelConfig(config) {
       // * https://babeljs.io/docs/en/next/babel-plugin-proposal-object-rest-spread
       require.resolve('@babel/plugin-proposal-object-rest-spread'),
 
-      require.resolve('@babel/plugin-transform-runtime'),
+      ...(isServer ? [] : [
+        require.resolve('@babel/plugin-transform-runtime')
+      ]),
 
       ...(react==='wp.element'
         ? []

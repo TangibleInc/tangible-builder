@@ -31,7 +31,7 @@ module.exports = async function compileFile({ config, srcFile, destFile, tasks, 
     await tasks.html(taskConfig)
     break
   default:
-    console.log(chalk.green('serve'), `Unknown file type ${path.relative(appRoot, srcFile)}`)
+    console.log(chalk.red('serve'), `Unknown file type ${path.relative(appRoot, srcFile)}`)
     return
   }
 }
