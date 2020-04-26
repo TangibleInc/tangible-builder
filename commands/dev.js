@@ -77,5 +77,5 @@ module.exports = async function devCommand(config) {
     })
   }
 
-  if (serve) require('../tasks/serve')({ ...config, task: serve, isDev: true, reloader })
+  if (serve) await require('../tasks/serve')({ ...config, task: serve, isDev: true, reloader })
 }

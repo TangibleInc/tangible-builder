@@ -12,7 +12,7 @@ module.exports = async function(config) {
     task,
     isDev = false,
     reloader,
-    build: buildOnly = false
+    buildOnly = false
   } = config
   let serveConfig = task
 
@@ -56,7 +56,9 @@ module.exports = async function(config) {
   if (!src) return
 
   await smartWatchAndCompile({
-    config, reloader, buildOnly,
+    config,
+    reloader,
+    buildOnly: buildOnly && !isDev,
     src,
     dest,
     appRoot

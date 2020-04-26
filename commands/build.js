@@ -18,5 +18,5 @@ module.exports = async function buildCommand(config) {
     throw e
   }
 
-  if (serve) require('../tasks/serve')({ ...config, task: serve, build: true })
+  if (serve) require('../tasks/serve')({ ...config, task: serve, buildOnly: true })
 }

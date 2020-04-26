@@ -1,6 +1,6 @@
 {
   "name": "@tangible/builder",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "description": "Tangible Builder: Develop, build, beautify, schema, docs, test, serve",
   "main": "index.js",
   "bin": {
