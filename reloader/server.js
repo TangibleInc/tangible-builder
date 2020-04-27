@@ -1,5 +1,7 @@
+const path = require('path')
 const ws = require('ws')
 const getPort = require('get-port')
+const chalk = require('chalk')
 
 let server
 let logger
@@ -7,9 +9,9 @@ let logger
 module.exports = async function liveReloadServer(options = {}) {
 
   // Port must be the same in client.js
-  const { port = 35729, chalk } = options
+  const { port = 35729, log = true } = options
 
-  logger = (...args) => console.log(chalk.green('reload'), ...args)
+  logger = (...args) => log && console.log(chalk.green('reload'), ...args)
 
   const availablePort = await getPort({ port: getPort.makeRange(port, port + 100) })
 
@@ -18,11 +20,29 @@ module.exports = async function liveReloadServer(options = {}) {
   let firstTime = true
   server.on('connection', () => {
     if (!firstTime) return
-    logger && logger('client connected')
+    logger('client connected')
     firstTime = false
   })
 
   logger(`WebSocket server listening at port ${availablePort}`)
+
+  if (options.watch) {
+
+    // Automatically watch and trigger client reload
+
+    const watchPath = path.join(options.watch, '**', '*.{js,css}')
+    const watcher = require('../plugins/gulp-watch')
+    const watchCommonOptions = require('../config/watch')
+
+    watcher(watchPath, watchCommonOptions, ({ event, path: changedFile }) => {
+
+      const extension = path.extname(changedFile).slice(1)
+
+      if (extension==='js') reload()
+      else if (extension==='css') reloadCSS()
+    })
+  }
+
 
   return { reload, reloadCSS, availablePort }
 }

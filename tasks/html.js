@@ -4,6 +4,7 @@ const watcher = require('../plugins/gulp-watch')
 const htmlProcessor = require('../plugins/html-processor')
 const fsp = require('fs-extra')
 const watchCommonOptions = require('../config/watch')
+const { createClient: createReloaderClient } = require('../reloader')
 
 module.exports = async function htmlTask(config) {
 
@@ -87,11 +88,8 @@ async function compileHtml({ srcFile, srcBaseDir, destFolder, chalk, toRelative,
   })
 
   if (reloader) {
-    const reloaderClient = `<script>${
-      await fsp.readFile(
-        path.join(__dirname, '..', 'reloader', 'client.js')
-      )
-    }</script>`.replace('%WEBSOCKET_PORT%', reloader.availablePort)
+
+    const reloaderClient = await createReloaderClient({ port: reloader.availablePort })
 
     if (result.indexOf('</body>') >= 0) {
       result = result.replace('</body>', reloaderClient+'</body>')
