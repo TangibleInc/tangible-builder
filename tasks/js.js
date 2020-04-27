@@ -46,7 +46,9 @@ module.exports = function jsTask(config) {
 
     return gulp.src(src, {
       read: false, // recommended option for gulp-bro
-      allowEmpty: true
+      allowEmpty: true,
+      resolveSymlinks: true,
+      follow: true
     })
       .pipe(browserify({
         debug: isDev, // Source maps
