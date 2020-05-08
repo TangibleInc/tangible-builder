@@ -8,8 +8,12 @@ let logger
 
 module.exports = async function liveReloadServer(options = {}) {
 
-  // Port must be the same in client.js
-  const { port = 35729, log = true } = options
+
+  const {
+    port = 35729, // Port must be the same in client.js
+    log = true,
+    init = false, // Reload existing client connection
+  } = options
 
   logger = (...args) => log && console.log(chalk.green('reload'), ...args)
 
@@ -22,6 +26,7 @@ module.exports = async function liveReloadServer(options = {}) {
     if (!firstTime) return
     logger('client connected')
     firstTime = false
+    if (init) reload()
   })
 
   logger(`WebSocket server listening at port ${availablePort}`)
@@ -34,12 +39,22 @@ module.exports = async function liveReloadServer(options = {}) {
     const watcher = require('../plugins/gulp-watch')
     const watchCommonOptions = require('../config/watch')
 
+    let reloading = { js: false, css: false }
+
     watcher(watchPath, watchCommonOptions, ({ event, path: changedFile }) => {
 
       const extension = path.extname(changedFile).slice(1)
 
-      if (extension==='js') reload()
-      else if (extension==='css') reloadCSS()
+      if (['js', 'css'].indexOf(extension) < 0
+        || reloading[extension]
+      ) return
+
+      reloading[extension] = true
+      setTimeout(() => {
+        if (extension==='css') reloadCSS()
+        else reload()
+        reloading[extension] = false
+      }, options.watchDelay || 0)
     })
   }
 
