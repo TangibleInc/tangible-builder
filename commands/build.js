@@ -8,6 +8,8 @@ module.exports = async function buildCommand(config) {
 
   console.log('Build for production\n')
 
+  process.env.NODE_ENV = 'production'
+
   const runTaskAction = task => getTaskAction(task.task)({
     ...config, task
   })

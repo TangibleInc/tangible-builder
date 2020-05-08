@@ -11,6 +11,8 @@ module.exports = async function devCommand(config) {
 
   console.log('Build for development\n')
 
+  process.env.NODE_ENV = 'development'
+
   // Optional: WebSocket connection to reload page on file change
 
   const reloader = !serve || serve.reload===false ? false : await require('../reloader/server')({
