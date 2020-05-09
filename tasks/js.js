@@ -13,6 +13,7 @@ const createBabelConfig = require('../config/babel')
 module.exports = function jsTask(config) {
 
   const {
+    appRoot,
     task: { src, dest },
     isDev = false,
     toRelative, chalk, fileExists,
@@ -63,6 +64,7 @@ module.exports = function jsTask(config) {
           path.resolve(srcDir),
           ...rootDirs.map(f => path.resolve(f)),
           includedNodeModulesPath,
+          path.join(appRoot, 'node_modules')
         ]
       }))
       .pipe($if(isDev, sourcemaps.init({ loadMaps: true })))
