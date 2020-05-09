@@ -30,8 +30,12 @@ module.exports = function sassTask({
 
   return new Promise((resolve, reject) => {
 
+    let hasError
+
     gulp.src(src, {
-      allowEmpty: true
+      allowEmpty: true,
+      resolveSymlinks: true,
+      follow: true
     })
       .pipe($if(isDev, sourcemaps.init()))
       .pipe(sass({
@@ -45,9 +49,10 @@ module.exports = function sassTask({
         processImport: false
       }))
       .on('error', function(e) {
-        if (e.message) console.error('sass', e.message)
+        if (e.message) console.error(chalk.red('sass'), e.message)
+        hasError = true
         this.emit('end')
-        reject()
+        reject(e)
       })
       .pipe(inlineBase64({
         baseDir: srcDir,
@@ -67,6 +72,7 @@ module.exports = function sassTask({
       .pipe($if(isDev, sourcemaps.write()))
       .pipe(gulp.dest(destDir))
       .on('end', function() {
+        if (hasError) return
         console.log(chalk.green('sass'), `${toRelative(src)} -> ${toRelative(dest)}`)
         resolve()
       })

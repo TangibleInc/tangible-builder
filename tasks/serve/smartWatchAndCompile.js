@@ -6,6 +6,7 @@ module.exports = async function smartWatchAndCompile({
   config, reloader, buildOnly,
   src,
   dest,
+  root: rootDirs = [],
   appRoot
 }) {
 
@@ -44,6 +45,7 @@ module.exports = async function smartWatchAndCompile({
   const watchProps = {
     config, tasks, reloader,
     appRoot,
+    rootDirs,
     srcFullPath,
     destFullPath,
     watchEvents,
@@ -84,6 +86,7 @@ function compileOnWatch({
 
   config, tasks, reloader,
   appRoot,
+  rootDirs,
   srcFullPath,
   destFullPath,
   watchEvents,
@@ -163,7 +166,14 @@ function compileOnWatch({
     return
   }
 
-  return compileFile({ config, srcFile, destFile, tasks, reloader })
+  return compileFile({
+    config,
+    srcFile,
+    destFile,
+    rootDirs: [...rootDirs, srcFullPath],
+    tasks,
+    reloader
+  })
     .then(() => {
       const isCss = srcExtension==='scss'
       reloader && reloader[isCss ? 'reloadCSS' : 'reload']()

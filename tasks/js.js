@@ -45,6 +45,8 @@ module.exports = function jsTask(config) {
 
   return new Promise((resolve, reject) => {
 
+    let hasError
+
     return gulp.src(src, {
       read: false, // recommended option for gulp-bro
       allowEmpty: true,
@@ -53,6 +55,7 @@ module.exports = function jsTask(config) {
     })
       .pipe(browserify({
         debug: isDev, // Source maps
+        error: 'emit',
         extensions,
         transform: [
           [babelify.configure(babelConfig), { extensions }],
@@ -67,6 +70,12 @@ module.exports = function jsTask(config) {
           path.join(appRoot, 'node_modules')
         ]
       }))
+      .on('error', function(e) {
+        if (e.message) console.error(chalk.red('js'), e.message)
+        hasError = true
+        this.emit('end')
+        reject(e)
+      })
       .pipe($if(isDev, sourcemaps.init({ loadMaps: true })))
       .pipe($if(isDev, sourcemaps.mapSources(function(sourcePath, file) {
         return path.join(srcRelativeToDest, sourcePath)
@@ -75,12 +84,8 @@ module.exports = function jsTask(config) {
       .pipe(rename(destFile))
       .pipe($if(isDev, sourcemaps.write()))
       .pipe(gulp.dest(destDir))
-      .on('error', function(e) {
-        if (e.message) console.error(chalk.red('js'), e.message)
-        this.emit('end')
-        reject()
-      })
       .on('end', () => {
+        if (hasError) return
         console.log(chalk.green('js'), `${toRelative(src)} -> ${toRelative(dest)}`)
         resolve()
       })
