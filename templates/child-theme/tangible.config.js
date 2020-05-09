@@ -1,5 +1,4 @@
 module.exports = {
-  type: '<%- projectType %>',
   build: [
     {
       task: 'js',
