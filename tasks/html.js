@@ -2,9 +2,13 @@ const path = require('path')
 const glob = require('glob')
 const watcher = require('../plugins/gulp-watch')
 const htmlProcessor = require('../plugins/html-processor')
-const fsp = require('fs-extra')
+const fsx = require('fs-extra')
 const watchCommonOptions = require('../config/watch')
 const { createClient: createReloaderClient } = require('../reloader')
+
+const babel = require('@babel/core')
+const createBabelConfig = require('../config/babel')
+const ReactHtml = require('../plugins/html-processor/ReactHtml')
 
 module.exports = async function htmlTask(config) {
 
@@ -38,16 +42,46 @@ module.exports = async function htmlTask(config) {
     return
   }
 
+  const handleError = e => console.log(chalk.red('html'), e)
+
+  // Transpile EJS templates
+
+  const babelConfig = createBabelConfig({
+    ...config,
+    task: {
+      ...config.task,
+      react: 'ReactHtml', // JSX pragma
+    },
+    isServer: true
+  })
+
+  // No strict mode, since templates use with() construct
+  babelConfig.sourceType = 'script'
+
+  const process = ({ filename = '', src, callback }) => {
+    babel.transform(src, {
+      filename,
+      ...babelConfig
+    }, function(err, result) {
+      if (err) {
+        handleError(err)
+        return
+      }
+      callback(result.code)
+    })
+  }
+
+
   const compileProps = {
     srcBaseDir: config.srcBaseDir || src.split('/')[0] || 'src',
     destFolder,
     chalk,
     toRelative,
     templateData,
-    reloader
+    reloader,
+    process
   }
 
-  const handleError = e => console.log(chalk.red('html'), e.message)
 
   for (const srcFile of files) {
     try {
@@ -74,17 +108,44 @@ module.exports = async function htmlTask(config) {
   })
 }
 
-async function compileHtml({ srcFile, srcBaseDir, destFolder, chalk, toRelative, templateData = {}, reloader }) {
+async function compileHtml({
+  srcFile,
+  srcBaseDir,
+  destFolder,
+  chalk,
+  toRelative,
+  templateData = {},
+  reloader,
+  process
+}) {
 
+  const srcFolder = path.dirname(srcFile)
   const thisSrcFile = toRelative(srcFile)
   const srcFileName = thisSrcFile.slice(srcBaseDir.length+1)
   const destFile = destFolder.indexOf('.')>0 ? destFolder : destFolder + '/' + srcFileName
 
-  const srcString = await fsp.readFile(srcFile, 'utf8')
+  const srcString = await fsx.readFile(srcFile, 'utf8')
 
-  let result = await htmlProcessor.render(srcString, templateData, {
+  let result = await htmlProcessor.render(srcString, {
+
+    // Constants and utilities for templates
+
+    __file: srcFile,
+    __dirname: srcFolder,
+    ReactHtml,
+    path,
+    glob,
+    fs: fsx,
+    require(f) {
+      return require(f[0]==='.' ? path.join(path.dirname(srcFolder, f)) : f)
+    },
+    local: {},
+
+    ...templateData
+  }, {
     filename: srcFile,
-    root: path.resolve(srcBaseDir)
+    root: path.resolve(srcBaseDir),
+    process
   })
 
   if (reloader) {
@@ -98,8 +159,8 @@ async function compileHtml({ srcFile, srcBaseDir, destFolder, chalk, toRelative,
     }
   }
 
-  await fsp.ensureFile(destFile) // Create any directories needed
-  await fsp.writeFile(destFile, result)
+  await fsx.ensureFile(destFile) // Create any directories needed
+  await fsx.writeFile(destFile, result)
 
   console.log(chalk.green('html'), `${toRelative(thisSrcFile)} -> ${toRelative(destFile)}`)
 }

@@ -48,7 +48,7 @@ module.exports = function createBabelConfig(config) {
 
       // Stage 1
 
-      // * https://babeljs.io/docs/en/next/babel-plugin-proposal-export-default-from
+      // https://babeljs.io/docs/en/next/babel-plugin-proposal-export-default-from
       require.resolve('@babel/plugin-proposal-export-default-from'),
 
       // https://babeljs.io/docs/en/next/babel-plugin-proposal-logical-assignment-operators
@@ -62,7 +62,7 @@ module.exports = function createBabelConfig(config) {
 
       // Stage 2
 
-      // * https://babeljs.io/docs/en/next/babel-plugin-proposal-export-namespace-from
+      // https://babeljs.io/docs/en/next/babel-plugin-proposal-export-namespace-from
       require.resolve('@babel/plugin-proposal-export-namespace-from'),
 
       // https://babeljs.io/docs/en/next/babel-plugin-proposal-throw-expressions
@@ -76,21 +76,21 @@ module.exports = function createBabelConfig(config) {
       // https://babeljs.io/docs/en/next/babel-plugin-proposal-nullish-coalescing-operator
       [require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'), { 'loose': false }],
 
-      // * Used for route/chunk-splitting
+      // Used for route/chunk-splitting
       require.resolve('@babel/plugin-syntax-dynamic-import'),
 
-      // * https://babeljs.io/docs/en/next/babel-plugin-proposal-class-properties
+      // https://babeljs.io/docs/en/next/babel-plugin-proposal-class-properties
       [require.resolve('@babel/plugin-proposal-class-properties'), { 'loose': false }],
 
       // ES2018
-      // * https://babeljs.io/docs/en/next/babel-plugin-proposal-object-rest-spread
+      // https://babeljs.io/docs/en/next/babel-plugin-proposal-object-rest-spread
       require.resolve('@babel/plugin-proposal-object-rest-spread'),
 
       ...(isServer ? [] : [
         require.resolve('@babel/plugin-transform-runtime')
       ]),
 
-      ...(react==='wp.element'
+      ...(react!=='React' // such as 'wp.element'
         ? []
         // Adds `import React from 'react'` if JSX is used
         : [require.resolve('../plugins/babel-plugin-react-require')])

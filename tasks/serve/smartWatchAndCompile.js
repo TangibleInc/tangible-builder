@@ -132,11 +132,12 @@ function compileOnWatch({
           && foldersWithIndex.html[checkDir]
         ) {
           indexSrcFile = path.join(checkDir, `index.${extension}`)
-          console.log(chalk.blue(event), srcFileRelative)
-          // console.log(chalk.blue('serve'), `index of ${srcFileRelative}`, '->', path.relative(appRoot, indexSrcFile))
+          console.log(chalk.blue(event), `${srcFileRelative}` /*, '->', path.relative(appRoot, indexSrcFile) */)
+          break
         }
       }
 
+      if (indexSrcFile) break
       // Check source root once
       if (dirParts.length===1 && dirParts[0]!=='.') dirParts.unshift('.')
 

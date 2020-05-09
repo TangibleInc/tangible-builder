@@ -26,7 +26,8 @@ module.exports = async function(config) {
   }
 
   const {
-    src, dest,
+    src,
+    dest,
     port = 3000
   } = serveConfig
 

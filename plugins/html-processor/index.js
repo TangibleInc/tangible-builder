@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs')
-const ejs = require('ejs')
+const ejs = require('./ejs')
 const renderMarkdown = require('../markdown-processor')
 
 /**
@@ -21,11 +21,12 @@ module.exports = {
     return (await ejs.render(str, data, {
       async: true,
       _with: true,
+      cache: false,
       ...options
     }))
     // The regex "s" flag makes "." match any character including new lines
-    // .replace(/<markdown>(.*?)<\/markdown>/gs, function(match, p1) {
-    //   return renderMarkdown(p1)
-    // })
+    .replace(/<markdown>(.*?)<\/markdown>/gs, function(match, p1) {
+      return renderMarkdown(p1)
+    })
   }
 }
