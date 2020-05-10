@@ -10,9 +10,9 @@ module.exports = async function(config) {
     appConfig = {},
     chalk,
     task,
-    isDev = false,
     reloader,
-    buildOnly = false
+    isDev = false,
+    buildOnly = false,
   } = config
   let serveConfig = task
 

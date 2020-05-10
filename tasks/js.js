@@ -74,7 +74,7 @@ module.exports = function jsTask(config) {
         if (e.message) console.error(chalk.red('js'), e.message)
         hasError = true
         this.emit('end')
-        reject(e)
+        reject()
       })
       .pipe($if(isDev, sourcemaps.init({ loadMaps: true })))
       .pipe($if(isDev, sourcemaps.mapSources(function(sourcePath, file) {

@@ -14,7 +14,6 @@ module.exports = async function devCommand(config) {
   process.env.NODE_ENV = 'development'
 
   // Optional: WebSocket connection to reload page on file change
-
   const reloader = !serve || serve.reload===false ? false : await require('../reloader/server')({
     chalk
   })
@@ -27,7 +26,7 @@ module.exports = async function devCommand(config) {
     try {
       await runTaskAction(task)
     } catch(e) {
-      console.error(chalk.red(task.task), e)
+      e && console.error(chalk.red(task.task), e.message)
     }
   })
 
@@ -79,5 +78,10 @@ module.exports = async function devCommand(config) {
     })
   }
 
-  if (serve) await require('../tasks/serve')({ ...config, task: serve, isDev: true, reloader })
+  if (serve) await require('../tasks/serve')({
+    ...config,
+    task: serve,
+    isDev: true,
+    reloader
+  })
 }

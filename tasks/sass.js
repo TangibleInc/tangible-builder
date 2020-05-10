@@ -52,7 +52,7 @@ module.exports = function sassTask({
         if (e.message) console.error(chalk.red('sass'), e.message)
         hasError = true
         this.emit('end')
-        reject(e)
+        reject()
       })
       .pipe(inlineBase64({
         baseDir: srcDir,

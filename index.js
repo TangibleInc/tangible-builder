@@ -7,4 +7,4 @@ const createConfig = require('./config')
 
   await require(`./commands/${command}`)(config)
 
-})().catch(console.error)
+})().catch(e => e && console.error(e))

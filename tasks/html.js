@@ -42,7 +42,7 @@ module.exports = async function htmlTask(config) {
     return
   }
 
-  const handleError = e => console.log(chalk.red('html'), e)
+  const handleError = e => console.log(chalk.red('html'), e.message)
 
   // Transpile EJS templates
 
@@ -71,7 +71,6 @@ module.exports = async function htmlTask(config) {
     })
   }
 
-
   const compileProps = {
     srcBaseDir: config.srcBaseDir || src.split('/')[0] || 'src',
     destFolder,
@@ -82,7 +81,6 @@ module.exports = async function htmlTask(config) {
     process
   }
 
-
   for (const srcFile of files) {
     try {
       await compileHtml({ srcFile, ...compileProps })
@@ -92,6 +90,8 @@ module.exports = async function htmlTask(config) {
   }
 
   if (!isDev || !watch) return
+
+  // Watch
 
   const watchEvents = ['change', 'add']
 
