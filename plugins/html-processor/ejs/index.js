@@ -572,7 +572,8 @@ Template.prototype = {
       this.generateSource();
       prepended +=
         '  var __output = "";\n' +
-        '  function __append(s) { if (s !== undefined && s !== null) __output += s }\n';
+        // Tangible: ADDED - Support array output
+        '  function __append(s) { if (s !== undefined && s !== null) __output += Array.isArray(s) ? s.join(\'\') : s }\n';
       if (opts.outputFunctionName) {
         prepended += '  var ' + opts.outputFunctionName + ' = __append;' + '\n';
       }
