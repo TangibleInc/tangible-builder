@@ -8,7 +8,6 @@ let logger
 
 module.exports = async function liveReloadServer(options = {}) {
 
-
   const {
     port = 35729, // Port must be the same in client.js
     log = true,

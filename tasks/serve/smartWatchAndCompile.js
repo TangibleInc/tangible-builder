@@ -2,6 +2,15 @@ const path = require('path')
 const glob = require('glob')
 const compileFile = require('./compileFile')
 
+const watcher = require('../../plugins/gulp-watch')
+const watchCommonOptions = require('../../config/watch')
+
+const tasks = {
+  js: require('../js'),
+  sass: require('../sass'),
+  html: require('../html'),
+}
+
 module.exports = async function smartWatchAndCompile({
   config, reloader, buildOnly,
   src,
@@ -16,16 +25,8 @@ module.exports = async function smartWatchAndCompile({
   const destFullPath = path.resolve(dest)
   const knownExtensions = 'html,js,jsx,ts,tsx,scss'
 
-  const watch = path.join(src, '**', '*.{'+knownExtensions+'}')
+  const watch = path.join(src, '**', '*.{'+knownExtensions+',md}')
   const watchEvents = ['change', 'add']
-  const watcher = require('../../plugins/gulp-watch')
-  const watchCommonOptions = require('../../config/watch')
-
-  const tasks = {
-    js: require('../js'),
-    sass: require('../sass'),
-    html: require('../html'),
-  }
 
   let initialRun = true
 
@@ -97,8 +98,14 @@ function compileOnWatch({
 
   const { chalk } = config
 
-  const srcExtension = path.extname(srcFile).slice(1)
+  let srcExtension = path.extname(srcFile).slice(1)
   const isJavaScript = srcExtension.match(/jsx?|tsx?/)
+
+  // Assume Markdown is loaded by HTML
+  // In the future, there may be a "markdown" task, in which case this should be skipped
+  if (srcExtension==='md') {
+    srcExtension = 'html'
+  }
 
   const srcBase = path.basename(srcFile).replace(`.${srcExtension}`, '')
   const srcFileDir = path.dirname(srcFile)

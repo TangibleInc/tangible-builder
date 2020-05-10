@@ -13,7 +13,7 @@ const ReactHtml = require('../plugins/html-processor/ReactHtml')
 module.exports = async function htmlTask(config) {
 
   // Backward compatibility
-  if (config.dest || config.destFolder) {
+  if (config.dest || config.destDir) {
     config.destFolder = config.dest || config.destDir
   }
 
