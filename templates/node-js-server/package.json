@@ -1,0 +1,18 @@
+{
+  "name": "<%- projectName %>",
+  "scripts": {
+    "dev": "rm -rf build && concurrently --raw 'tgb dev' 'sleep 3 && nodemon --delay 1 --quiet --watch build --exec \"NODE_PATH=build NODE_ENV=development node build/index\"'",
+    "build": "rm -rf build && NODE_ENV=production tgb build && cp package.json build; if [ ! -f \".env.production\" ]; then cp .env.development .env.production; fi; cp .env.production build",
+    "try": "NODE_ENV=production NODE_PATH=build node build/index",
+    "--- Production ---": "Served from build",
+    "serve": "NODE_ENV=production NODE_PATH=. node index"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "@tangible/builder": "1.x",
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.3"
+  }
+}

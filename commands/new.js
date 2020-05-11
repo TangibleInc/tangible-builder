@@ -28,7 +28,8 @@ const main = async ({ args, options }) => {
         'Static site',
         'Plugin',
         'Theme',
-        'Child theme'
+        'Child theme',
+        'Node.js server',
       ],
       filter: (value) => changeCase.kebab(value),
       validate: (value) => value ? true : false
@@ -70,10 +71,10 @@ const main = async ({ args, options }) => {
   const projectFolder = projectName
   const projectFolderFullPath = path.join(process.cwd(), projectFolder)
 
-  const isStatic = projectType==='static-site'
-  const sourceFolder = isStatic ? 'src' : 'assets/src'
+  const hasAssets = ['plugin', 'theme', 'child-theme'].indexOf(projectType) >= 0
+  const sourceFolder = hasAssets ? 'assets/src' : 'src'
   const sourceFolderFullPath = path.join(projectFolderFullPath, sourceFolder)
-  const destinationFolder = isStatic ? 'build' : 'assets/build'
+  const destinationFolder = hasAssets ? 'assets/build' : 'build'
 
   const appConfigPath = path.join(projectFolder, 'tangible.config.js')
 

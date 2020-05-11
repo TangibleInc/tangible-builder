@@ -1,0 +1,12 @@
+# App-specific
+/build
+/.env.production
+
+# Always ignore
+/vendor
+node_modules
+*.log
+*.local.js
+composer.lock
+package-lock.json
+yarn.lock
