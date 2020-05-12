@@ -140,6 +140,7 @@ async function compileHtml({
       return require(f[0]==='.' ? path.join(path.dirname(srcFolder, f)) : f)
     },
     local: {},
+    route: '/' + path.relative(srcBaseDir, toRelative(srcFolder)),
 
     ...templateData
   }, {
