@@ -13,13 +13,14 @@ const ReactHtml = require('../plugins/html-processor/ReactHtml')
 module.exports = async function htmlTask(config) {
 
   // Backward compatibility
-  if (config.dest || config.destDir) {
-    config.destFolder = config.dest || config.destDir
+  if (config.task.dest || config.task.destDir) {
+    config.task.destFolder = config.task.dest || config.task.destDir
   }
 
   const {
     task: {
       src,
+      srcFolder,
       destFolder = 'build', // Alias and default
       watch,
       root: rootDirs = [],
@@ -72,7 +73,9 @@ module.exports = async function htmlTask(config) {
   }
 
   const compileProps = {
-    srcBaseDir: config.srcBaseDir || src.split('/')[0] || 'src',
+    srcBaseDir: srcFolder || src.split('/').filter(f =>
+      f.indexOf('*') < 0 && f.indexOf('.html') < 0
+    ).join('/'),
     destFolder,
     chalk,
     toRelative,
