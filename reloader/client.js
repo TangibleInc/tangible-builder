@@ -5,7 +5,7 @@
   var ws
 
   function connectSocket() {
-    ws = new WebSocket('ws://'+(location.host || 'localhost').split(':')[0] + ':%WEBSOCKET_PORT%')
+    ws = new WebSocket('ws://'+(window.liveReloadHost || 'localhost').split(':')[0] + ':%WEBSOCKET_PORT%')
     ws.onmessage = function(e) {
       var data = JSON.parse(e.data)
       if (data.reload) location.reload()
