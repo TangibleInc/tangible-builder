@@ -158,6 +158,7 @@ function compileOnWatch({
     }
 
     srcFile = indexSrcFile
+    srcExtension = path.extname(indexSrcFile).slice(1)
   }
 
   // const pageName = path.relative(srcFullPath, srcFile).split('/').slice(0, -1).join('.')
