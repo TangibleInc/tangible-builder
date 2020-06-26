@@ -14,7 +14,7 @@ module.exports = function jsTask(config) {
 
   const {
     appRoot,
-    task: { src, dest },
+    task: { src, dest, map = false },
     isDev = false,
     toRelative, chalk, fileExists,
   } = config
@@ -54,7 +54,7 @@ module.exports = function jsTask(config) {
       follow: true
     })
       .pipe(browserify({
-        debug: isDev, // Source maps
+        debug: isDev || map, // Source maps
         error: 'emit',
         extensions,
         transform: [
@@ -76,13 +76,13 @@ module.exports = function jsTask(config) {
         this.emit('end')
         reject()
       })
-      .pipe($if(isDev, sourcemaps.init({ loadMaps: true })))
-      .pipe($if(isDev, sourcemaps.mapSources(function(sourcePath, file) {
+      .pipe($if(isDev || map, sourcemaps.init({ loadMaps: true })))
+      .pipe($if(isDev || map, sourcemaps.mapSources(function(sourcePath, file) {
         return path.join(srcRelativeToDest, sourcePath)
       })))
       .pipe($if(!isDev, terser()))
       .pipe(rename(destFile))
-      .pipe($if(isDev, sourcemaps.write()))
+      .pipe($if(isDev || map, sourcemaps.write( isDev ? undefined : '.' )))
       .pipe(gulp.dest(destDir))
       .on('end', () => {
         if (hasError) return

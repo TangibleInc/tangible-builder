@@ -65,7 +65,7 @@ The property `build` is an array of build tasks.  Each task has the following sc
 | `src` | Source entry file (can use wildcards for html) |
 | `dest` | Destination file (must be folder for html) |
 | `watch` | Path of files to watch, in [glob syntax](https://github.com/isaacs/node-glob#glob-primer) |
-
+| `map` | Boolean - Set `true` to output source map |
 
 ### React
 

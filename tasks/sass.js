@@ -12,7 +12,7 @@ const browsersList = require('../config/browsers')
 const fileExists = require('../utils/fileExists')
 
 module.exports = function sassTask({
-  task: { src, dest, root: rootDirs = [] },
+  task: { src, dest, root: rootDirs = [], map = false },
   appRoot,
   isDev = false,
   toRelative, chalk
@@ -37,7 +37,7 @@ module.exports = function sassTask({
       resolveSymlinks: true,
       follow: true
     })
-      .pipe($if(isDev, sourcemaps.init()))
+      .pipe($if(isDev || map, sourcemaps.init()))
       .pipe(sass({
         keepSpecialComments: false,
         // Resolve require paths
@@ -66,10 +66,10 @@ module.exports = function sassTask({
       }))
       .pipe($if(!isDev, minifyCSS()))
       .pipe(rename(destFile))
-      .pipe($if(isDev, sourcemaps.mapSources(function(sourcePath, file) {
+      .pipe($if(isDev || map, sourcemaps.mapSources(function(sourcePath, file) {
         return path.join(srcRelativeToDest, sourcePath)
       })))
-      .pipe($if(isDev, sourcemaps.write()))
+      .pipe($if(isDev || map, sourcemaps.write( isDev ? undefined : '.' )))
       .pipe(gulp.dest(destDir))
       .on('end', function() {
         if (hasError) return
