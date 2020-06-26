@@ -5,13 +5,15 @@ module.exports = {
       src: 'src/index.js',
       dest: 'build/app.min.js',
       watch: 'src/**/*.js',
-      react: 'wp.element'
+      react: 'wp.element',
+      map: true
     },
     {
       task: 'sass',
       src: 'src/index.scss',
       dest: 'build/app.min.css',
-      watch: 'src/**/*.scss'
+      watch: 'src/**/*.scss',
+      map: true
     },
     {
       task: 'html',
