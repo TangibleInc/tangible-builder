@@ -12,7 +12,12 @@ const browsersList = require('../config/browsers')
 const fileExists = require('../utils/fileExists')
 
 module.exports = function sassTask({
-  task: { src, dest, root: rootDirs = [], map = false },
+  task: {
+    src,
+    dest,
+    root: rootDirs = [],
+    map = false
+  },
   appRoot,
   isDev = false,
   toRelative, chalk
@@ -73,7 +78,9 @@ module.exports = function sassTask({
       .pipe(gulp.dest(destDir))
       .on('end', function() {
         if (hasError) return
-        console.log(chalk.green('sass'), `${toRelative(src)} -> ${toRelative(dest)}`)
+        console.log(chalk.green('sass'), `${toRelative(src)} -> ${toRelative(dest)}${
+          !isDev && map ? `, ${toRelative(dest)}.map` : ''
+        }`)
         resolve()
       })
   })
