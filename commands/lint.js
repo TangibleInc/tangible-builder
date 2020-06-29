@@ -15,18 +15,22 @@ module.exports = function lintCommand(config) {
   // Find vendor folder
 
   const moduleRootPath = fs.realpathSync(path.join(__dirname, '..'))
-  let vendorPath
+  const moduleVendorPath = path.join(moduleRootPath, 'vendor')
+  let vendorPath = moduleVendorPath
 
   // As NPM module: tangible-builder/vendor
-  if (!fileExists(vendorPath = path.join(moduleRootPath, 'vendor'))) {
+  if (!fileExists(moduleVendorPath)) {
     // As Composer module: ./vendor/tangible/builder -> .
     vendorPath = path.join(moduleRootPath, '..', '..', '..', 'vendor')
-  }
 
-  if (!fileExists(vendorPath)) {
-    console.log(`\nCould not find vendor folder: ${vendorPath}\nRun: composer install\n`)
-    process.exit(1)
-    return
+    if (!fileExists(vendorPath)) {
+
+      // TODO: Run composer install automatically in module root
+
+      console.log(`\nCould not find vendor folder: ${path.relative(vendorPath)}\nRun: composer install\n`)
+      process.exit(1)
+      return
+    }
   }
 
   // For beautify, warn if Git repo has uncommitted changes
