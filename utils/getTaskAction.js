@@ -9,7 +9,7 @@ module.exports = function getTaskAction(taskName) {
   let taskAction = taskActions[taskPath]
 
   if (!taskAction) {
-    if (!fileExists(taskPath)) throw `Unknown task "${taskName}"`
+    if (!fileExists(taskPath)) throw new Error(`Unknown task "${taskName}"`)
     taskAction = taskActions[taskPath] = require(taskPath)
   }
 
