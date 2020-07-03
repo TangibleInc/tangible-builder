@@ -5,9 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "tgb dev",
-    "build": "tgb build",
-    "lint": "tgb lint",
-    "beautify": "tgb beautify"
+    "build": "tgb build"
   },
   "devDependencies": {
     "@tangible/builder": "*"

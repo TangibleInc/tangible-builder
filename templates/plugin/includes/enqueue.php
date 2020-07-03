@@ -1,14 +1,15 @@
 <?php
+// global $plugin
 
-// Enqueue styles and scripts
+// Enqueue frontend styles and scripts
 
-add_action('wp_enqueue_scripts', function() use ($<%- projectNameSnakeCase %>) {
+add_action('wp_enqueue_scripts', function() use ($plugin) {
 
-  $url = $<%- projectNameSnakeCase %>->plugin->url;
-  $version = $<%- projectNameSnakeCase %>->plugin->version;
+  $url = $plugin->url;
+  $version = $plugin->version;
 
   wp_enqueue_style(
-    '<%- projectNameKebabCase %>-css',
+    '<%- projectNameKebabCase %>',
     $url . 'assets/build/<%- projectNameKebabCase %>.min.css',
     [],
     $version

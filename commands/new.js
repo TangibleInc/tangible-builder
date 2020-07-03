@@ -58,6 +58,13 @@ const main = async ({ args, options }) => {
     },
     {
       type: 'input',
+      name: 'menuTitle',
+      when: (data) => data.type==='plugin',
+      message: 'Plugin settings menu title '+chalk.reset.gray('- Press enter for default'),
+      default: data => data.title
+    },
+    {
+      type: 'input',
       name: 'description',
       message: 'Project description'
     },
@@ -111,6 +118,10 @@ const main = async ({ args, options }) => {
 
     // For plugins
     projectTitle: answers.title,
+    tangibleProjectTitle: 'Tangible: '+(
+      answers.title.replace('Tangible ', '')
+    ),
+    projectMenuTitle: answers.menuTitle || answers.title,
     projectDescription: answers.description || '',
     projectNameKebabCase: changeCase.kebab(projectName),
     projectNamePascalCase: changeCase.pascal(projectName),
@@ -137,6 +148,12 @@ const main = async ({ args, options }) => {
 
     console.log('  '+(path.relative(projectFolderFullPath, destFile)))
   }
+
+  // For WordPress plugin, rename index.php
+  if (projectType==='plugin') await fs.renameSync(
+    path.join(projectFolderFullPath, 'index.php'),
+    path.join(projectFolderFullPath, `${templateData.projectNameKebabCase}.php`),
+  )
 
   console.log('Done.\n')
   console.log(`Start by running: cd ${projectFolder} && npm install${projectType==='plugin' ? ' && composer install' : ''}`)

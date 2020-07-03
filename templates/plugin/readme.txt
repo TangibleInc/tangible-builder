@@ -1,6 +1,6 @@
-=== Tangible: <%- projectTitle %> ===
+=== <%- tangibleProjectTitle %> ===
 Requires at least: 4.0
-Tested up to: 5.2.2
+Tested up to: 5.4.2
 Requires PHP: 7
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,6 +20,6 @@ Tags:
 
 = 0.0.1 =
 
-Release Date: 2019-01-01
+Release Date: 2020-01-01
 
 - Initial release
