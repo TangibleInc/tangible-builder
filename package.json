@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build": "cd plugins/schema-processor && tsc -p .",
-    "release": "npm publish && cd plugins/schema-processor && npm publish",
+    "release": "npm publish --access public",
+    "release:schema": "cd plugins/schema-processor && npm publish --access public",
     "test-dev": "cd test && ../run dev",
     "test-lint": "cd test && ../run lint",
     "test-beautify": "cd test && ../run beautify",
