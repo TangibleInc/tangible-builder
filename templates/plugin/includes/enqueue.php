@@ -1,5 +1,5 @@
 <?php
-// global $plugin
+// local $plugin
 
 // Enqueue frontend styles and scripts
 

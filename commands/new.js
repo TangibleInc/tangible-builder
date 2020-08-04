@@ -134,17 +134,30 @@ const main = async ({ args, options }) => {
 
   const templateFiles = glob.sync(path.join(templateFolder, '**', '{*.*,.*}'))
 
+  // Files with placeholders
+  const renderExtensions = ['php', 'js', 'json', 'txt', 'md']
+
   for (const templateFile of templateFiles) {
 
     const destFile = path.join(projectFolderFullPath, path.relative(templateFolder, templateFile))
-    const srcString = await fs.readFile(templateFile, 'utf8')
-    const result = await htmlProcessor.render(srcString, templateData, {
-      filename: templateFile,
-      root: path.resolve(templateFolder)
-    })
 
     await fs.ensureFile(destFile) // Create any directories needed
-    await fs.writeFile(destFile, result)
+
+    const extension = templateFile.split('.').pop()
+
+    if (renderExtensions.indexOf(extension) >= 0) {
+
+      const srcString = await fs.readFile(templateFile, 'utf8')
+      const result = await htmlProcessor.render(srcString, templateData, {
+        filename: templateFile,
+        root: path.resolve(templateFolder)
+      })
+
+      await fs.writeFile(destFile, result)
+
+    } else {
+      await fs.copy(templateFile, destFile)
+    }
 
     console.log('  '+(path.relative(projectFolderFullPath, destFile)))
   }

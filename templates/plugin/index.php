@@ -40,6 +40,16 @@ add_action('plugins_loaded', function() {
     'multisite'      => false,
   ]);
 
+  $plugin->register_dependencies([
+    'example-plugin/example-plugin.php' => [
+      'title' => 'Example plugin',
+      'url' => 'https://tangibleplugins.com/example-plugin',
+      'fallback_check' => function() {
+        return function_exists('example_plugin');
+      }
+    ],
+  ]);
+
   <%- projectNameSnakeCase %>( $plugin );
 
   // Features loaded will have $framework and $plugin in their scope
