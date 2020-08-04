@@ -135,7 +135,7 @@ const main = async ({ args, options }) => {
   const templateFiles = glob.sync(path.join(templateFolder, '**', '{*.*,.*}'))
 
   // Files with placeholders
-  const renderExtensions = ['php', 'js', 'json', 'txt', 'md']
+  const renderExtensions = ['html', 'js', 'json', 'md', 'php', 'txt']
 
   for (const templateFile of templateFiles) {
 
