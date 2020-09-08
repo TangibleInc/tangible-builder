@@ -17,7 +17,7 @@ module.exports = function jsTask(config) {
     task: {
       src,
       dest,
-      map = false
+      map = true
     },
     isDev = false,
     toRelative, chalk, fileExists,
@@ -90,9 +90,7 @@ module.exports = function jsTask(config) {
       .pipe(gulp.dest(destDir))
       .on('end', () => {
         if (hasError) return
-        console.log(chalk.green('js'), `${toRelative(src)} -> ${toRelative(dest)}${
-          !isDev && map ? `, ${toRelative(dest)}.map` : ''
-        }`)
+        console.log(chalk.green('js'), `${toRelative(src)} -> ${toRelative(dest)}`)
         resolve()
       })
   })

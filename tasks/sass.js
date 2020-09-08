@@ -16,7 +16,7 @@ module.exports = function sassTask({
     src,
     dest,
     root: rootDirs = [],
-    map = false
+    map = true
   },
   appRoot,
   isDev = false,
@@ -78,9 +78,7 @@ module.exports = function sassTask({
       .pipe(gulp.dest(destDir))
       .on('end', function() {
         if (hasError) return
-        console.log(chalk.green('sass'), `${toRelative(src)} -> ${toRelative(dest)}${
-          !isDev && map ? `, ${toRelative(dest)}.map` : ''
-        }`)
+        console.log(chalk.green('sass'), `${toRelative(src)} -> ${toRelative(dest)}`)
         resolve()
       })
   })
