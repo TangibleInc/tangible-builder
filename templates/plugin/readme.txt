@@ -1,4 +1,5 @@
 === <%- tangibleProjectTitle %> ===
+Stable tag: trunk
 Requires at least: 4.0
 Tested up to: 5.4.2
 Requires PHP: 7
