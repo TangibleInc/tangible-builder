@@ -75,7 +75,9 @@ module.exports = function jsTask(config) {
         ]
       }))
       .on('error', function(e) {
-        if (e.message) console.error(chalk.red('js'), e.message)
+        if (e.annotated || e.message) {
+          console.error(chalk.red('js'), e.annotated || e.message)
+        }
         hasError = true
         this.emit('end')
         reject()
