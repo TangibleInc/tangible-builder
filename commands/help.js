@@ -6,7 +6,7 @@ Usage: tgb [command] (...options)
 
 Commands:
 
-new - Create initial config file
+new - Create new project
 help - Show this help message
 
 dev - Build for development
