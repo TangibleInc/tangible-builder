@@ -14,7 +14,8 @@ module.exports = function createBabelConfig(config) {
   }
 
   let { alias, react = appConfig.react || 'React' } = config.task || {}
-  if (react==='preact') {
+
+  if (react.toLowerCase()==='preact') {
 
     const preactPath = path.join(appRoot, 'node_modules', 'preact/compat')
 

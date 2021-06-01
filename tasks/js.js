@@ -1,9 +1,9 @@
 const path = require('path')
 const gulp = require('gulp')
-const browserify = require('gulp-bro')
+const browserify = require('../utils/browserify')
 const rename = require('gulp-rename')
 const babelify = require('babelify')
-const terser = require('gulp-terser');
+const terser = require('gulp-terser')
 const $if = require('gulp-if')
 const sourcemaps = require('gulp-sourcemaps')
 
@@ -52,7 +52,7 @@ module.exports = function jsTask(config) {
     let hasError
 
     return gulp.src(src, {
-      read: false, // recommended option for gulp-bro
+      read: false, // Recommended option for gulp-bro
       allowEmpty: true,
       resolveSymlinks: true,
       follow: true
